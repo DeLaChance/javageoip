@@ -30,6 +30,10 @@ dependencies {
     compile "io.micronaut:micronaut-runtime"
     compile "io.micronaut:micronaut-http-client"
     compile "io.micronaut:micronaut-http-server-netty"
+    compile "org.codehaus.groovy:groovy-all:2.4.15"
+
+    compileOnly "io.micronaut:micronaut-inject-groovy"
+
     kapt "io.micronaut:micronaut-inject-java"
     kapt "io.micronaut:micronaut-validation"
     kaptTest "io.micronaut:micronaut-inject-java"
@@ -56,10 +60,6 @@ run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
 
 mainClassName = "location.cloud.Application"
 
-
-test {
-    useJUnitPlatform()
-}
 
 allOpen {
 	annotation("io.micronaut.aop.Around")
