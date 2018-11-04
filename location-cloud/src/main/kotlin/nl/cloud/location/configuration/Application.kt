@@ -1,4 +1,4 @@
-package location.cloud
+package nl.cloud.location.configuration
 
 import io.micronaut.runtime.Micronaut
 

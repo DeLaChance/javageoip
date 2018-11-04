@@ -7,9 +7,9 @@ location.
 
 
 TODO:
-- Choose backend and database technology
+- Make code that adds entities via REST, add stubs for DB
+- Choose database technology
 - Make data entities in DB
-- Make code that adds entities via REST
 - Study AWS sdk
 
 
@@ -25,8 +25,8 @@ Requirements:
 Technology:
 
 AWS (Alexa, notifications, auto-scaling, lambda)
-Time-series database (choose of your liking)
-Akka / Micronaut
+(Time-series) database (choose of your liking)
+Micronaut
 
 
 Data entities:

@@ -1,13 +1,13 @@
-package location.cloud
+package nl.cloud.location.adapter.http
 
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 
-@Controller("/")
-class HelloController {
+@Controller("/api/users/")
+class UserController {
 
     init {
-        println("Started HelloController")
+        println("Started UserController")
     }
 
     @Get("/hello/{name}")
