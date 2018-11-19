@@ -4,7 +4,7 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.HttpClient
 import io.micronaut.runtime.server.EmbeddedServer
-import nl.cloud.location.domain.User
+import nl.cloud.location.domain.user.User
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification

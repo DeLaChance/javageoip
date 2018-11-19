@@ -1,9 +1,10 @@
-package nl.cloud.location.domain
+package nl.cloud.location.domain.user
 
+import nl.cloud.location.domain.user.User
 import spock.lang.Specification
 
 /**
- * Unit test for {@link nl.cloud.location.domain.User}.
+ * Unit test for {@link nl.cloud.location.domain.user.User}.
  *
  */
 class UserSpec extends Specification {

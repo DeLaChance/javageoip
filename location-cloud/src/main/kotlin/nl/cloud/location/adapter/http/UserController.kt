@@ -2,7 +2,7 @@ package nl.cloud.location.adapter.http
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
-import nl.cloud.location.domain.User
+import nl.cloud.location.domain.user.User
 import java.util.*
 
 @Controller("/api/users/")

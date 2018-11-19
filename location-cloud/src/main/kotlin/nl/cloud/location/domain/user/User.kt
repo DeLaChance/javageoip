@@ -1,5 +1,6 @@
-package nl.cloud.location.domain
+package nl.cloud.location.domain.user
 
+import nl.cloud.location.domain.TimedGeoLocation
 import java.util.*
 
 /**
