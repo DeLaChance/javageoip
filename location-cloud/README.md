@@ -8,9 +8,9 @@ location.
 
 TODO:
 - Make code that adds entities via REST, add stubs for DB
+- Study AWS sdk
 - Choose database technology
 - Make data entities in DB
-- Study AWS sdk
 
 
 Requirements:

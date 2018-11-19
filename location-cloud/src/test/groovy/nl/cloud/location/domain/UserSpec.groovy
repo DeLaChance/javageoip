@@ -1,0 +1,46 @@
+package nl.cloud.location.domain
+
+import spock.lang.Specification
+
+/**
+ * Unit test for {@link nl.cloud.location.domain.User}.
+ *
+ */
+class UserSpec extends Specification {
+
+    def instanceToBeTested
+
+    def "test that a user can be initialized"() {
+        given:
+        def name = "John Snow"
+        def keyWords = ["Lord Commander of the Night's Watch", "Azor Ahai"]
+        def timedGeoLocations = []
+
+        when:
+        instanceToBeTested = new User(name)
+
+        then:
+        instanceToBeTested.getId() != null
+        instanceToBeTested.getName() == name
+        instanceToBeTested.getKeyWords() == []
+        instanceToBeTested.getTimedLocations() == []
+    }
+
+    def "test that a user can be assigned keywords"() {
+        given:
+        def name = "John Snow"
+        def keyWords = ["Lord Commander of the Night's Watch", "Azor Ahai"]
+
+        instanceToBeTested = new User(name)
+
+        when:
+        keyWords.each {keyword ->
+            instanceToBeTested.addKeyword(keyword)
+        }
+
+        then:
+        instanceToBeTested.getId() != null
+        instanceToBeTested.getName() == name
+        instanceToBeTested.getKeyWords() == keyWords
+    }
+}
