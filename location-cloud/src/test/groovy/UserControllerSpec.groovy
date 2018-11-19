@@ -1,6 +1,7 @@
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.context.ApplicationContext
 import io.micronaut.http.HttpRequest
+import io.micronaut.http.HttpResponse
+import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.HttpClient
 import io.micronaut.runtime.server.EmbeddedServer
 import nl.cloud.location.domain.User
@@ -25,15 +26,23 @@ class UserControllerSpec extends Specification {
     }
 
     void "test that when the fetch users api is invoked that the list of users is returned as a response"() {
-        given:
-        def objectMapper = new ObjectMapper()
-
         expect:
-        List<User> users = client.toBlocking()
-            .retrieve(HttpRequest.GET('/api/users/'), List.class)
+        List<User> users = client.toBlocking().retrieve(HttpRequest.GET('/api/users/'), List.class)
 
         users.size() == 1
         users[0].name == "John Snow"
+    }
+
+    void "test that when the fetch user by id api is invoked that the found user is returned"() {
+        given:
+        List<User> users = client.toBlocking().retrieve(HttpRequest.GET('/api/users/'), List.class)
+        String id = users[0].id
+
+        when:
+        User user = client.toBlocking().retrieve(HttpRequest.GET("/api/users/${id}"), User.class)
+
+        then:
+        user.id == id
     }
 
     void "test that when the create user api is invoked that the list of users contains that user"() {
@@ -45,9 +54,17 @@ class UserControllerSpec extends Specification {
 
         then:
         returnedUser.name == "Eddard Stark"
+    }
 
-        List<User> users = client.toBlocking().retrieve(HttpRequest.GET("/api/users"), List.class)
-        users.size() == 2
-        users[1].name == "Eddard Stark"
+    void "test that when the delete user api is invoked that the found user is deleted"() {
+        given:
+        List<User> users = client.toBlocking().retrieve(HttpRequest.GET('/api/users/'), List.class)
+        String id = users[0].id
+
+        when:
+        HttpResponse<User> response = client.toBlocking().exchange(HttpRequest.DELETE("/api/users/${id}"))
+
+        then:
+        response.status() == HttpStatus.OK
     }
 }
