@@ -7,14 +7,18 @@ location.
 
 
 TODO:
+- Add remaining code to track geolocation
+- Add configuration (i.e. select repository bean type based on configuration)
+
+- Study AWS sdk
+
 - Choose backend and database technology
 - Make data entities in DB
-- Make code that adds entities via REST
-- Study AWS sdk
+
 
 
 Requirements:
-1. You should be able to add a user to follow via REST endpoint.
+1. You should be able to add a user to follow via REST endpoint. [x]
 2. User should send updates to a REST endpoint to give its location.
 3. The system should (auto-)scale well with the number of users.
 4. You should be able to receive notifications on SMS whenever a user leaves a certain defined area.
@@ -45,5 +49,3 @@ Geolocation:
 Notification:
 - Type
 - Value (e.g. 'email', 'phone number')
-
-

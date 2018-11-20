@@ -23,7 +23,7 @@ class InMemoryUserRepository : UserRepository {
     }
 
     override fun addUser(user: User): User {
-        this.users.put(user.id, user)
+        this.users.put(user.id.value, user)
         return user
     }
 

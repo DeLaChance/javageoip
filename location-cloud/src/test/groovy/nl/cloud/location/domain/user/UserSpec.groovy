@@ -14,8 +14,6 @@ class UserSpec extends Specification {
     def "test that a user can be initialized"() {
         given:
         def name = "John Snow"
-        def keyWords = ["Lord Commander of the Night's Watch", "Azor Ahai"]
-        def timedGeoLocations = []
 
         when:
         instanceToBeTested = new User(name)
@@ -24,7 +22,6 @@ class UserSpec extends Specification {
         instanceToBeTested.getId() != null
         instanceToBeTested.getName() == name
         instanceToBeTested.getKeyWords() == []
-        instanceToBeTested.getTimedLocations() == []
     }
 
     def "test that a user can be assigned keywords"() {
