@@ -5,16 +5,13 @@ Description:
 The app should be able to trace a users location over time and give notification based on this
 location.
 
-
 TODO:
-- Add remaining code to track geolocation
-- Add configuration (i.e. select repository bean type based on configuration)
-
+- Create 'sub-application' that creates a user and gives a location every now and then
+- Run app on AWS VM
 - Study AWS sdk
 
 - Choose backend and database technology
 - Make data entities in DB
-
 
 
 Requirements:
@@ -25,6 +22,7 @@ Requirements:
 5. You should be able to query a users location over a specified period of time.
 6. You should be able to query using a voice command, e.g. "Where is Lucien right now?"
 7. Visualize 5+6 using a map in a browser.
+8. Make mobile phone app that sends location periodically to backend
 
 Technology:
 
