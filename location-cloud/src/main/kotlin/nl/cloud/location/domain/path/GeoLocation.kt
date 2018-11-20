@@ -1,4 +1,4 @@
-package nl.cloud.location.domain
+package nl.cloud.location.domain.path
 
 /**
  * Represents a location on earth.

@@ -1,4 +1,4 @@
-package nl.cloud.location.domain
+package nl.cloud.location.domain.path
 
 /**
  * Represents a fixed moment in time and a location.
