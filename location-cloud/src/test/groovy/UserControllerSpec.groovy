@@ -15,7 +15,7 @@ class UserControllerSpec extends Specification {
 
     @Shared
     @AutoCleanup
-    private EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
+    private EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, "integrationTest", "inMemory")
 
     @Shared
     @AutoCleanup

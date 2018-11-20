@@ -1,6 +1,5 @@
 package nl.cloud.location.adapter.http
 
-import io.micronaut.context.annotation.Primary
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import nl.cloud.location.domain.user.User
@@ -13,7 +12,7 @@ class UserController {
     var repository: UserRepository
 
     @Inject
-    constructor(@Primary repository: UserRepository) {
+    constructor(repository: UserRepository) {
         this.repository = repository
     }
 

@@ -1,14 +1,16 @@
 package nl.cloud.location.domain.user
 
-import io.micronaut.context.annotation.Primary
 import java.util.*
-import javax.inject.Singleton
+import javax.annotation.PostConstruct
 
-@Primary
-@Singleton
 class InMemoryUserRepository : UserRepository {
 
     private val users: HashMap<String, User> = hashMapOf()
+
+    @PostConstruct
+    fun postConstruct() {
+        println("Started up InMemoryUserRepository")
+    }
 
     init {
         this.addUser(User("John Snow"))
