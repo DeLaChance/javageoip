@@ -13,11 +13,11 @@ class UserControllerSpec extends Specification {
 
     @Shared
     @AutoCleanup
-    EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
+    private EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
 
     @Shared
     @AutoCleanup
-    HttpClient client = HttpClient.create(embeddedServer.URL)
+    private HttpClient client = HttpClient.create(embeddedServer.URL)
 
     void "test that when the hello api is invoked that a hello-echo response is returned"() {
         expect:
