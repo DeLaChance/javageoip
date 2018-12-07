@@ -56,11 +56,6 @@ shadowJar {
     mergeServiceFiles()
 }
 
-run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
-
-mainClassName = "location.cloud.Application"
-
-
 allOpen {
 	annotation("io.micronaut.aop.Around")
 }
@@ -80,3 +75,6 @@ compileTestKotlin {
 	}
 }
 
+mainClassName = "nl.cloud.location.configuration.Application"
+applicationDefaultJvmArgs = ["-Xms512m", "-Xmx1g"]
+run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
