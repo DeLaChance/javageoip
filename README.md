@@ -8,6 +8,8 @@ location.
 TODO:
 - Create 'sub-application' that creates a user and gives a location every now and then
 - Run app on AWS VM
+- Connect 'sub-application' and AWS VM
+
 - Study AWS sdk
 
 - Choose backend and database technology
@@ -16,7 +18,7 @@ TODO:
 
 Requirements:
 1. You should be able to add a user to follow via REST endpoint. [x]
-2. User should send updates to a REST endpoint to give its location.
+2. User should send updates to a REST endpoint to give its location. 
 3. The system should (auto-)scale well with the number of users.
 4. You should be able to receive notifications on SMS whenever a user leaves a certain defined area.
 5. You should be able to query a users location over a specified period of time.

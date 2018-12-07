@@ -29,6 +29,9 @@ dependencies {
     compile "io.micronaut:micronaut-runtime"
     compile "io.micronaut:micronaut-http-client"
     compile "io.micronaut:micronaut-http-server-netty"
+    compile "info.picocli:picocli"
+    compile "io.micronaut.configuration:micronaut-picocli"
+
     kapt "io.micronaut:micronaut-inject-java"
     kapt "io.micronaut:micronaut-validation"
     kaptTest "io.micronaut:micronaut-inject-java"
@@ -46,7 +49,7 @@ shadowJar {
 
 run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
 
-mainClassName = "location.tracker.Application"
+mainClassName = "location.tracker.configuration.Application"
 
 
 test {

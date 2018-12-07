@@ -15,5 +15,6 @@ object Application {
                 .start()
 
         logger.info("Started up LocationTracker application")
+
     }
 }

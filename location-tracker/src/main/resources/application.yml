@@ -1,3 +1,10 @@
 micronaut:
     application:
         name: location-tracker
+    location-cloud:
+        host: "localhost"
+        port: "8086"
+        apis:
+            base: "${micronaut.location-cloud.host}:${micronaut.location-cloud.port}"
+            users: "/api/users/"
+            paths: "/api/paths/"
