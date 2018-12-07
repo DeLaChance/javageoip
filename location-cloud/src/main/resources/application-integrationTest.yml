@@ -2,4 +2,5 @@ micronaut:
   application:
     name: location-cloud
   server:
+    host: localhost
     port: 8087

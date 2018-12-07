@@ -4,16 +4,26 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import nl.cloud.location.domain.user.User
 import nl.cloud.location.domain.user.UserRepository
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import javax.annotation.PostConstruct
 import javax.inject.Inject
 
 @Controller("/api/users/")
 class UserController {
+
+    val logger: Logger = LoggerFactory.getLogger(UserController::class.qualifiedName)
 
     var repository: UserRepository
 
     @Inject
     constructor(repository: UserRepository) {
         this.repository = repository
+    }
+
+    @PostConstruct
+    fun postConstruct() {
+        logger.info("Started up the UserController")
     }
 
     @Get("/hello/{name}")

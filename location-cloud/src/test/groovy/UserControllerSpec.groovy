@@ -7,11 +7,17 @@ import io.micronaut.http.client.HttpClient
 import io.micronaut.runtime.server.EmbeddedServer
 import nl.cloud.location.domain.user.User
 import nl.cloud.location.domain.user.UserId
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
+import spock.lang.Timeout
 
 class UserControllerSpec extends Specification {
+
+    @Shared
+    private Logger logger = LoggerFactory.getLogger(UserControllerSpec.class)
 
     @Shared
     @AutoCleanup
@@ -21,12 +27,18 @@ class UserControllerSpec extends Specification {
     @AutoCleanup
     private HttpClient client = HttpClient.create(embeddedServer.URL)
 
+    def setupSpec() {
+        logger.info("Started up embedded server with url {} ", embeddedServer.URL.toString())
+    }
+
+    @Timeout(value = 1)
     void "test that when the hello api is invoked that a hello-echo response is returned"() {
         expect:
         client.toBlocking()
                 .retrieve(HttpRequest.GET('/api/users/hello/Lucien')) == "Hello Lucien"
     }
 
+    @Timeout(value = 1)
     void "test that when the fetch users api is invoked that the list of users is returned as a response"() {
         expect:
         List<User> users = client.toBlocking().retrieve(HttpRequest.GET('/api/users/'), List.class)
@@ -35,6 +47,7 @@ class UserControllerSpec extends Specification {
         users[0].name == "John Snow"
     }
 
+    @Timeout(value = 1)
     void "test that when the fetch user by id api is invoked that the found user is returned"() {
         given:
         List<User> users = client.toBlocking().retrieve(HttpRequest.GET('/api/users/'), Argument.of(List.class, User.class))
@@ -47,6 +60,7 @@ class UserControllerSpec extends Specification {
         user.id == id
     }
 
+    @Timeout(value = 1)
     void "test that when the create user api is invoked that the list of users contains that user"() {
         given:
         User user = new User("Eddard Stark")
@@ -58,6 +72,7 @@ class UserControllerSpec extends Specification {
         returnedUser.name == "Eddard Stark"
     }
 
+    @Timeout(value = 1)
     void "test that when the delete user api is invoked that the found user is deleted"() {
         given:
         List<User> users = client.toBlocking().retrieve(HttpRequest.GET('/api/users/'), Argument.of(List.class, User.class))
