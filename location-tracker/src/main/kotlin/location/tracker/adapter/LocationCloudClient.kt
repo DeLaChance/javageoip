@@ -1,10 +1,10 @@
 package location.tracker.adapter
 
 import io.reactivex.Completable
-import location.tracker.domain.User
+import location.tracker.domain.UserDto
 
 interface LocationCloudClient {
 
-    fun createUser(user: User): Completable
+    fun createUser(user: UserDto): Completable
 
 }

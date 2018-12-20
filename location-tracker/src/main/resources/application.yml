@@ -1,6 +1,10 @@
 micronaut:
     application:
         name: location-tracker
+    user:
+        type: "file"
+        location: "/etc/user.json"
+        default-location: "user.json"
     location-cloud:
         host: "localhost"
         port: "8086"

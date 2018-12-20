@@ -7,7 +7,7 @@ import io.micronaut.http.client.RxHttpClient
 import io.micronaut.http.client.annotation.Client
 import io.reactivex.Completable
 import location.tracker.adapter.LocationCloudClient
-import location.tracker.domain.User
+import location.tracker.domain.UserDto
 import javax.inject.Inject
 
 /**
@@ -25,7 +25,7 @@ class LocationCloudHttpClient : LocationCloudClient {
     @Inject
     lateinit var httpClient: RxHttpClient
 
-    override fun createUser(user: User): Completable {
+    override fun createUser(user: UserDto): Completable {
         return httpClient.exchange(HttpRequest.POST(usersApiLocation, user))
             .firstOrError()
             .flatMapCompletable { response ->
