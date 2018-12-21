@@ -1,25 +1,21 @@
 package location.tracker.domain
 
-import java.util.*
-
 /**
  * The user of this location-tracker application
  */
 class User(
-    val id: UUID,
+    val id: String,
     val name: String,
     val keyWords: List<String>
 ) {
 
     init {
-        if( this.name == "" ) {
-            throw IllegalArgumentException("${this.name} is not a valid name")
+        if( this.id.isEmpty() ) {
+            throw IllegalArgumentException("${this.id} is not a valid id")
         }
-    }
 
-    companion object {
-        fun from(userDto: UserDto): User {
-            return User(UUID.randomUUID(), userDto.name, userDto.keyWords)
+        if( this.name.isEmpty() ) {
+            throw IllegalArgumentException("${this.name} is not a valid name")
         }
     }
 

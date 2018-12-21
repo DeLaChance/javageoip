@@ -1,6 +1,12 @@
 micronaut:
     application:
         name: location-tracker
+    server:
+        port: -1
+        host: ""
+    http:
+        logger-name: "HttpClient"
+
     user:
         type: "file"
         location: "/etc/user.json"
@@ -9,6 +15,6 @@ micronaut:
         host: "localhost"
         port: "8086"
         apis:
-            base: "${micronaut.location-cloud.host}:${micronaut.location-cloud.port}"
-            users: "/api/users/"
-            paths: "/api/paths/"
+            base: "http://localhost:8086/api/"
+            users: "users/"
+            paths: "paths/"

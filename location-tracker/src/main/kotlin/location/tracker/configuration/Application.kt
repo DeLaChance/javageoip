@@ -1,7 +1,7 @@
 package location.tracker.configuration
 
 import io.micronaut.runtime.Micronaut
-import location.tracker.domain.FileBasedSingleUserRepository
+import location.tracker.domain.LocationPublisher
 import org.slf4j.LoggerFactory
 
 object Application {
@@ -10,12 +10,14 @@ object Application {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        Micronaut.build()
+        var app = Micronaut.build()
                 .packages("location.tracker")
-                .mainClass(Application.javaClass)
+                .mainClass(javaClass)
                 .start()
-                // TODO: need a way to do this outside of the code, e.g. via annotation or configuration.
-                .createBean(FileBasedSingleUserRepository::class.java)
+
+        // TODO: need a way to do this outside of the code, e.g. via annotation or configuration.
+        app.createBean(LocationPublisher::class.java)
+
 
         logger.info("Started up LocationTracker application")
     }

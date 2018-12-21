@@ -26,6 +26,5 @@ class UserId(val value: String) {
         return value
     }
 
-
 }
 

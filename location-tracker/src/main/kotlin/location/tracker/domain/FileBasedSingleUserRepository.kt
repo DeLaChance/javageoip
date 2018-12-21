@@ -15,7 +15,7 @@ import javax.inject.Singleton
  */
 @Primary
 @Singleton
-class FileBasedSingleUserRepository {
+class FileBasedSingleUserRepository : SingleUserRepository {
 
     private val logger = LoggerFactory.getLogger(FileBasedSingleUserRepository::class.java)
 
@@ -52,7 +52,10 @@ class FileBasedSingleUserRepository {
                 .toString(Charsets.UTF_8)
         }
 
-        val userDto: UserDto = mapper.readValue<UserDto>(jsonString)
-        user = User.from(userDto)
+        user = mapper.readValue<User>(jsonString)
+    }
+
+    override fun fetchUser(): User? {
+        return user
     }
 }
