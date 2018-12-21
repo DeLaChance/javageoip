@@ -1,9 +1,12 @@
 package location.tracker.domain
 
 import io.micronaut.context.annotation.Primary
+import io.micronaut.retry.annotation.Retryable
 import io.micronaut.scheduling.annotation.Scheduled
+import io.reactivex.Completable
 import location.tracker.adapter.LocationCloudClient
 import org.slf4j.LoggerFactory
+import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,15 +33,40 @@ class LocationPublisher {
         this.locationCloudClient = locationCloudClient
     }
 
-    @Scheduled(fixedDelay = "10s")
+    @PostConstruct
+    @Retryable(attempts = "5", delay = "2s")
+    fun tryAddUserToCloud() {
+        var newUser: User? = this.repository.fetchUser()
+
+        if ( newUser != null ) {
+            this.locationCloudClient.findUserById(newUser.id)
+                .flatMapCompletable({optional ->
+                    if( optional.isPresent ) {
+                        Completable.complete()
+                    } else {
+                        this.locationCloudClient.createUser(newUser)
+                    }
+                })
+                .subscribe(
+                    { logger.info("User has been created or did already exist.") },
+                    { throwable -> logger.error("Could not create the user or something else went wrong: ", throwable) }
+                )
+        }
+    }
+
+    @Scheduled(fixedDelay = "10s", initialDelay = "5s")
     fun publishLocation() {
         var user: User? = this.repository.fetchUser()
 
         if( user != null ) {
             var location: TimedLocation = this.locationRetriever.retrieveTimedLocation()
             this.locationCloudClient.publishLocation(user, location)
-
-            logger.info("Publish location ${location} for user ${user}")
+                .subscribe(
+                    {
+                        logger.info("Successfully published location ${location} for user ${user}.")
+                    },
+                    { error -> logger.error("Error while publishing location: ", error) }
+                )
         } else {
             logger.info("Cannot publish user location, as there has not been created a user yet.")
         }

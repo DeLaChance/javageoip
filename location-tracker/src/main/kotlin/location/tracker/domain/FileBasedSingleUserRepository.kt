@@ -10,6 +10,8 @@ import java.io.File
 import javax.annotation.PostConstruct
 import javax.inject.Singleton
 
+
+
 /**
  * A single-value user repository {@link User} backed by the file system.
  */
@@ -35,7 +37,7 @@ class FileBasedSingleUserRepository : SingleUserRepository {
 
     @PostConstruct
     fun readUserFile() {
-        val jsonString: String;
+        val jsonString: String
 
         if( File(fileLocation).exists() ) {
             logger.info("Reading user file at location: {}", fileLocation)
@@ -52,7 +54,10 @@ class FileBasedSingleUserRepository : SingleUserRepository {
                 .toString(Charsets.UTF_8)
         }
 
-        user = mapper.readValue<User>(jsonString)
+        val newUser: User? = mapper.readValue<User>(jsonString)
+        if ( newUser != null ) {
+            user = newUser
+        }
     }
 
     override fun fetchUser(): User? {

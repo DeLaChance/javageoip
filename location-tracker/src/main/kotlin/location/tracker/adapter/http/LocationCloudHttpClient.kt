@@ -6,12 +6,14 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.RxHttpClient
 import io.reactivex.Completable
+import io.reactivex.Single
 import location.tracker.adapter.LocationCloudClient
 import location.tracker.domain.TimedLocation
 import location.tracker.domain.User
 import location.tracker.domain.UserTimedLocation
 import org.slf4j.LoggerFactory
 import java.net.URL
+import java.util.*
 import javax.annotation.PostConstruct
 
 /**
@@ -36,8 +38,6 @@ class LocationCloudHttpClient : LocationCloudClient {
 
     @PostConstruct
     fun postConstruct() {
-        logger.info("Creating http client with url ${baseUrl} ${usersApiLocation} ${pathsApiLocation}")
-
         httpClient = RxHttpClient.create(URL(baseUrl))
     }
 
@@ -51,6 +51,22 @@ class LocationCloudHttpClient : LocationCloudClient {
                     Completable.error(Exception("Could not create user ${user}."))
                 }
             }
+    }
+
+    override fun findUserById(id: String): Single<Optional<User>> {
+        return httpClient.exchange(usersApiLocation + id, User::class.java)
+                .firstElement()
+                .flatMapSingle { response ->
+                    if( response.status == HttpStatus.OK && response.body() != null ) {
+                        Single.just(response.body)
+                    } else if( response.status == HttpStatus.NOT_FOUND ) {
+                        Single.just(Optional.empty())
+                    } else {
+                        Single.error(Exception("Could not find user with id ${id}.\n" +
+                            "Status is: ${response.status} with reason ${response.reason()}.")
+                        )
+                    }
+                }
     }
 
     override fun publishLocation(user: User, timedLocation: TimedLocation): Completable {
