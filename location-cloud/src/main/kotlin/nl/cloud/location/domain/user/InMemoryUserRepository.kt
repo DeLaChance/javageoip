@@ -13,7 +13,8 @@ class InMemoryUserRepository : UserRepository {
     }
 
     init {
-        this.addUser(User("John Snow"))
+        val dummyUser: User = User(name="John Snow")
+        this.addUser(dummyUser)
     }
 
     override fun fetchUsers(): List<User> {
@@ -25,7 +26,7 @@ class InMemoryUserRepository : UserRepository {
     }
 
     override fun addUser(user: User): User {
-        this.users.put(user.id.value, user)
+        this.users.put(user.id, user)
         return user
     }
 

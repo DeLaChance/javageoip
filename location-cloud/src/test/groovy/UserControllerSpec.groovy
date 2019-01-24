@@ -6,7 +6,6 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.HttpClient
 import io.micronaut.runtime.server.EmbeddedServer
 import nl.cloud.location.domain.user.User
-import nl.cloud.location.domain.user.UserId
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import spock.lang.AutoCleanup
@@ -51,7 +50,7 @@ class UserControllerSpec extends Specification {
     void "test that when the fetch user by id api is invoked that the found user is returned"() {
         given:
         List<User> users = client.toBlocking().retrieve(HttpRequest.GET('/api/users/'), Argument.of(List.class, User.class))
-        UserId id = users[0].id
+        String id = users[0].id
 
         when:
         User user = client.toBlocking().retrieve(HttpRequest.GET("/api/users/${id}"), User.class)
@@ -76,7 +75,7 @@ class UserControllerSpec extends Specification {
     void "test that when the delete user api is invoked that the found user is deleted"() {
         given:
         List<User> users = client.toBlocking().retrieve(HttpRequest.GET('/api/users/'), Argument.of(List.class, User.class))
-        UserId id = users[0].id
+        String id = users[0].id
 
         when:
         HttpResponse<User> response = client.toBlocking().exchange(HttpRequest.DELETE("/api/users/${id}"))
