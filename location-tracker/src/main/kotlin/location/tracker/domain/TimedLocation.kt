@@ -19,7 +19,7 @@ data class TimedLocation(
     }
 
     override fun toString(): String {
-        return "TimedLocation(longitude=$longitude, latitude=$latitude, timestamp=$timestamp)"
+        return "{\"longitude\":$longitude,\"latitude\":$latitude,\"timestamp\":$timestamp}}"
     }
 
 }

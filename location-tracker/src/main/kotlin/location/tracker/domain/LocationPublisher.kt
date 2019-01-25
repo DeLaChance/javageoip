@@ -22,6 +22,8 @@ class LocationPublisher {
     var locationRetriever: LocationRetriever
     var locationCloudClient: LocationCloudClient
 
+    var userExistsInCloud = false
+
     @Inject
     @Primary
     constructor(repository: SingleUserRepository,
@@ -48,27 +50,33 @@ class LocationPublisher {
                     }
                 })
                 .subscribe(
-                    { logger.info("User has been created or did already exist.") },
+                    {
+                        this.userExistsInCloud = true
+                        logger.info("User has been created or did already exist.")
+                    },
                     { throwable -> logger.error("Could not create the user or something else went wrong: ", throwable) }
                 )
         }
     }
 
-    @Scheduled(fixedDelay = "10s", initialDelay = "5s")
+    @Scheduled(fixedDelay = "5s", initialDelay = "5s")
     fun publishLocation() {
         var user: User? = this.repository.fetchUser()
 
-        if( user != null ) {
-            var location: TimedLocation = this.locationRetriever.retrieveTimedLocation()
-            this.locationCloudClient.publishLocation(user, location)
-                .subscribe(
-                    {
-                        logger.info("Successfully published location ${location} for user ${user}.")
-                    },
-                    { error -> logger.error("Error while publishing location: ", error) }
-                )
+        if( user == null ) {
+            logger.info("Cannot publish user location, as there has not been defined a user for this tracker.")
+        } else if( this.userExistsInCloud == false ) {
+            logger.info("Cannot publish user location, as the user does not exist in the location-cloud yet.")
         } else {
-            logger.info("Cannot publish user location, as there has not been created a user yet.")
+            var location: TimedLocation = this.locationRetriever.retrieveTimedLocation()
+            val userTimedLocation: UserTimedLocation = UserTimedLocation(user, location)
+            this.locationCloudClient.publishLocation(userTimedLocation)
+                    .subscribe(
+                            {
+                                logger.info("Successfully published location ${location} for user ${user}.")
+                            },
+                            { error -> logger.error("Error while publishing location: ", error) }
+                    )
         }
     }
 }

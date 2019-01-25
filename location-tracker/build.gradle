@@ -35,6 +35,11 @@ dependencies {
     compile "io.micronaut.configuration:micronaut-picocli"
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.+"
 
+    compile "io.vertx:vertx-core:3.6.2"
+    compile "io.vertx:vertx-lang-kotlin:3.6.2"
+    compile 'io.vertx:vertx-web-client:3.6.2'
+    compile 'io.vertx:vertx-rx-java2:3.6.2'
+
     kapt "io.micronaut:micronaut-inject-java"
     kapt "io.micronaut:micronaut-validation"
     kaptTest "io.micronaut:micronaut-inject-java"

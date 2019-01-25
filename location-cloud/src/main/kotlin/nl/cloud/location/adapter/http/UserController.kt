@@ -14,12 +14,8 @@ class UserController {
 
     val logger: Logger = LoggerFactory.getLogger(UserController::class.qualifiedName)
 
-    var repository: UserRepository
-
     @Inject
-    constructor(repository: UserRepository) {
-        this.repository = repository
-    }
+    lateinit var repository: UserRepository
 
     @PostConstruct
     fun postConstruct() {

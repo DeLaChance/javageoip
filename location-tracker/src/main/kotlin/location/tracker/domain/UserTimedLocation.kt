@@ -9,4 +9,8 @@ class UserTimedLocation(
 ) {
     constructor(user: User, timedLocation: TimedLocation) : this(user.id, timedLocation)
 
+    override fun toString(): String {
+        return "{\"id\":\"$id\", \"timedLocation\": $timedLocation} "
+    }
+
 }

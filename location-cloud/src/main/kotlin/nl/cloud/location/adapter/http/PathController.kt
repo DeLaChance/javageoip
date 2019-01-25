@@ -23,14 +23,11 @@ class PathController {
 
     val logger: Logger = LoggerFactory.getLogger(PathController::class.qualifiedName)
 
-    var pathRepository: PathRepository
-    var userRepository: UserRepository
+    @Inject
+    lateinit var pathRepository: PathRepository
 
     @Inject
-    constructor(pathRepository: PathRepository, userRepository: UserRepository) {
-        this.pathRepository = pathRepository
-        this.userRepository = userRepository
-    }
+    lateinit var userRepository: UserRepository
 
     @Get("/")
     fun getPaths(): HttpResponse<List<Path>> {

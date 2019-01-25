@@ -20,7 +20,6 @@ class User(
     }
 
     override fun toString(): String {
-        return "{ id=${id}, name=${name}, keyWords=[${keyWords}] }"
+        return "{\"id\":\"${id}\", \"name\":\"${name}\", \"keyWords\":\"${keyWords}\"}"
     }
-
 }

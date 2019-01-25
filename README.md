@@ -6,8 +6,9 @@ The app should be able to trace a users location over time and give notification
 location.
 
 TODO:
-- Finish location-tracker
 - Make React-based frontend
+- Make more fine-grained query api
+
 - Deploy location-cloud and location-tracker to AWS image
 - Integrate with SMS service
 - Integrate with Alexa service

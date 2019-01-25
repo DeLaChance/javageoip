@@ -1,9 +1,9 @@
 package nl.cloud.location.domain.path
 
-import io.micronaut.context.annotation.Primary
 import nl.cloud.location.domain.user.UserId
+import javax.inject.Singleton
 
-@Primary
+@Singleton
 class InMemoryPathRepository : PathRepository {
 
     private val paths: HashMap<UserId, Path> = hashMapOf()
