@@ -7,12 +7,14 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import nl.cloud.location.domain.path.Path
 import nl.cloud.location.domain.path.PathRepository
+import nl.cloud.location.domain.path.TimedGeoLocation
 import nl.cloud.location.domain.path.UserTimedLocation
 import nl.cloud.location.domain.user.User
 import nl.cloud.location.domain.user.UserId
 import nl.cloud.location.domain.user.UserRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import javax.annotation.Nullable
 import javax.inject.Inject
 
 /**
@@ -34,15 +36,17 @@ class PathController {
         return HttpResponse.ok(this.pathRepository.getPaths())
     }
 
-    @Get("/{userId}")
-    fun fetchPathByUserId(userId: String): HttpResponse<Path> {
+    @Get("/{userId}/locations{?startTime,endTime}")
+    fun fetchPathByUserId(userId: String, @Nullable startTime: Long?, @Nullable endTime: Long?): HttpResponse<List<TimedGeoLocation>> {
         val path: Path? = this.pathRepository.fetchPathByUserId(UserId(userId))
-        val httpResponse: HttpResponse<Path>
+        val httpResponse: HttpResponse<List<TimedGeoLocation>>
 
         if (path == null) {
             httpResponse = HttpResponse.notFound()
         } else {
-            httpResponse = HttpResponse.ok(path)
+            var points: List<TimedGeoLocation> = path.toTimeFilteredPointList(startTime, endTime)
+
+            httpResponse = HttpResponse.ok(points)
         }
 
         return httpResponse

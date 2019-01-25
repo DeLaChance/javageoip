@@ -36,7 +36,7 @@ class LocationPublisher {
     }
 
     @PostConstruct
-    @Retryable(attempts = "5", delay = "2s")
+    @Retryable(attempts = "5", delay = "10s")
     fun tryAddUserToCloud() {
         var newUser: User? = this.repository.fetchUser()
 

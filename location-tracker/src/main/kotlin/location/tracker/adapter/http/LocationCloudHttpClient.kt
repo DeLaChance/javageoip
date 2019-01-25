@@ -50,7 +50,7 @@ class LocationCloudHttpClient : LocationCloudClient {
         return httpClient.requestAbs(HttpMethod.POST, url)
             .rxSendJson(JsonObject(user.toString()))
             .flatMapCompletable { httpResponse ->
-                if( httpResponse.statusCode() == 200 ) {
+                if( httpResponse.statusCode() == 201 ) {
                     Completable.complete()
                 } else {
                     Completable.error(Exception("Could not create user ${user}."))
