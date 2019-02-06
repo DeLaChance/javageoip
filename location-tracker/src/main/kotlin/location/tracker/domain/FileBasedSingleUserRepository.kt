@@ -22,10 +22,10 @@ class FileBasedSingleUserRepository : SingleUserRepository {
     private val logger = LoggerFactory.getLogger(FileBasedSingleUserRepository::class.java)
 
     @Value("\${micronaut.user.location}")
-    private lateinit var fileLocation: String
+    lateinit var fileLocation: String
 
     @Value("\${micronaut.user.default-location}")
-    private lateinit var defaultFileLocation: String
+    lateinit var defaultFileLocation: String
 
     private val mapper = ObjectMapper().registerModule(KotlinModule())
 

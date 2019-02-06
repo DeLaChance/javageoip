@@ -14,26 +14,21 @@ import javax.inject.Singleton
  * Retrieves the location of a given user and publishes it on the network.
  */
 @Singleton
+@Primary
 class LocationPublisher {
 
     private val logger = LoggerFactory.getLogger(LocationPublisher::class.java)
 
-    var repository: SingleUserRepository
-    var locationRetriever: LocationRetriever
-    var locationCloudClient: LocationCloudClient
-
-    var userExistsInCloud = false
+    @Inject
+    lateinit var repository: SingleUserRepository
 
     @Inject
-    @Primary
-    constructor(repository: SingleUserRepository,
-        locationRetriever: LocationRetriever,
-        locationCloudClient: LocationCloudClient) {
+    lateinit var locationRetriever: LocationRetriever
 
-        this.repository = repository
-        this.locationRetriever = locationRetriever
-        this.locationCloudClient = locationCloudClient
-    }
+    @Inject
+    lateinit var locationCloudClient: LocationCloudClient
+
+    var userExistsInCloud = false
 
     @PostConstruct
     @Retryable(attempts = "5", delay = "10s")
