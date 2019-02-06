@@ -1,8 +1,6 @@
 import React from "react"
 
-import RawTextView from "./RawTextView"
-
-class App extends React.Component {
+class RawTextViewItem extends React.Component {
 
     constructor(props) {
         super(props);
@@ -10,9 +8,9 @@ class App extends React.Component {
 
     render() {
         return (
-            <RawTextView />
+            <li>{this.props.value}</li>
         );
     }
 }
 
-export default App;
+export default RawTextViewItem;
