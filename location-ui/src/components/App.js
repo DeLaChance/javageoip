@@ -14,7 +14,7 @@ class App extends React.Component {
         return (
             <>
                 <TitleBar />
-                <SearchAndSelectDrawer />
+                <SearchAndSelectDrawer items={['John Snow', 'Daenerys Targaryen', 'Tyrion Lannister']} />
                 <RawTextView />
             </>
         );

@@ -6,14 +6,18 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import CheckBox from '@material-ui/icons/CheckBox';
 
-class SearchAndSelectDrawer extends React.Component {
+import SearchInput from './SearchInput/SearchInput'
 
-    state = {
-        open: true
-    }
+class SearchAndSelectDrawer extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            open: true,
+            text: "",
+            items: props.items
+        }
     }
 
     toggleDrawer = () => {
@@ -22,13 +26,32 @@ class SearchAndSelectDrawer extends React.Component {
         })
     };
 
+    handleInputChange = event => {
+        event.preventDefault();
+        this.changeInputText(event.target.value);
+    };
+
+    changeInputText = text => {
+        this.setState({
+           text: text,
+           items: this.props.items.filter(value => {
+                if (text === null || text.length === 0) {
+                    return true;
+                } else {
+                    return value.indexOf(text) !== -1;
+                }
+           })
+        });
+    };
+
     render() {
         return (
             <Drawer anchor="left" open={this.state.open}>
-                <div tabIndex={0} role="button" onClick={this.toggleDrawer} onKeyDown={this.toggleDrawer}>
+                <div tabIndex={0} role="button">
                     <List>
-                        {['John Snow', 'Daenerys Targaryen', 'Tyrion Lannister'].map(text => (
-                            <ListItem button key={text}>
+                        <SearchInput onChange={this.handleInputChange} />
+                        {this.state.items.map(text => (
+                            <ListItem button key={text} onClick={this.toggleDrawer}>
                                 <ListItemIcon>
                                     <CheckBox />
                                 </ListItemIcon>
