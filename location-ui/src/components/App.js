@@ -1,6 +1,7 @@
 import React from "react"
 
 import RawTextView from "./RawTextView"
+import TitleBar from "./TitleBar";
 
 class App extends React.Component {
 
@@ -10,7 +11,10 @@ class App extends React.Component {
 
     render() {
         return (
-            <RawTextView />
+            <>
+                <TitleBar />
+                <RawTextView />
+            </>
         );
     }
 }
