@@ -19,7 +19,7 @@ class TitleBar extends React.Component {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" color="inherit">
-                        Location Tracker 
+                        Location Tracker
                     </Typography>
                 </Toolbar>
             </AppBar>

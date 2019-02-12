@@ -2,6 +2,7 @@ import React from "react"
 
 import RawTextView from "./RawTextView"
 import TitleBar from "./TitleBar";
+import SearchAndSelectDrawer from "./SearchAndSelectDrawer"
 
 class App extends React.Component {
 
@@ -13,6 +14,7 @@ class App extends React.Component {
         return (
             <>
                 <TitleBar />
+                <SearchAndSelectDrawer />
                 <RawTextView />
             </>
         );
