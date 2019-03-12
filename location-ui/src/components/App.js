@@ -4,16 +4,19 @@ import RawTextView from "./RawTextView"
 import TitleBar from "./TitleBar";
 import SearchAndSelectDrawer from "./SearchAndSelectDrawer"
 
+import SelectableUser from './SelectableUser'
+import SearchItem from "./SearchItem";
+
 class App extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            drawerOpen: true
+            drawerOpen: true,
+            users: [new SelectableUser('John Snow', false), new SelectableUser('Daenerys Targaryen', false), new SelectableUser('Tyrion Lannister', false)],
         };
     }
-
 
     toggleDrawer = () => {
         this.setState({
@@ -21,12 +24,25 @@ class App extends React.Component {
         });
     };
 
+    toggleSelectedUser = userName => {
+        this.setState({
+            users: this.state.users.map(user => {
+                if (user.userName === userName) {
+                    return new SelectableUser(userName, !user.isSelected)
+                } else {
+                    return user;
+                }
+            })
+        });
+    };
+
     render() {
         return (
             <>
                 <TitleBar openMenu={this.toggleDrawer} />
-                <SearchAndSelectDrawer drawerOpen={this.state.drawerOpen} items={['John Snow', 'Daenerys Targaryen', 'Tyrion Lannister']} drawerToggle={this.toggleDrawer} />
-                <RawTextView />
+                <SearchAndSelectDrawer drawerOpen={this.state.drawerOpen} items={this.state.users.map(user => new SearchItem(user.userName, user.isSelected))}
+                   drawerToggle={this.toggleDrawer} toggleSelectedUser={name => this.toggleSelectedUser(name)} />
+                <RawTextView users={this.state.users} />
             </>
         );
     }

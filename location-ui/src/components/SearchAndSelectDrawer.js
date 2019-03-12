@@ -3,8 +3,7 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import CheckBox from '@material-ui/icons/CheckBox';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import SearchInput from './SearchInput/SearchInput'
 
@@ -14,28 +13,9 @@ class SearchAndSelectDrawer extends React.Component {
         super(props);
 
         this.state = {
-            text: "",
-            items: props.items
+            text: ""
         }
     }
-
-    handleInputChange = event => {
-        event.preventDefault();
-        this.changeInputText(event.target.value);
-    };
-
-    changeInputText = text => {
-        this.setState({
-           text: text,
-           items: this.props.items.filter(value => {
-                if (text === null || text.length === 0) {
-                    return true;
-                } else {
-                    return value.indexOf(text) !== -1;
-                }
-           })
-        });
-    };
 
     render() {
         return (
@@ -43,20 +23,43 @@ class SearchAndSelectDrawer extends React.Component {
                 <div tabIndex={0} role="button">
                     <List>
                         <SearchInput onChange={this.handleInputChange} />
-                        {this.state.items.map(text => (
-                            <ListItem button key={text} onClick={this.props.drawerToggle}>
-                                <ListItemIcon>
-                                    <CheckBox />
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
+                        {this.filterItems(this.props.items).map(item => this.convertToDomListItem(item))}
                     </List>
                 </div>
             </Drawer>
         );
     }
 
+
+    handleInputChange = event => {
+        event.preventDefault();
+        this.changeInputText(event.target.value);
+    }
+
+    changeInputText = text => {
+        this.setState({
+            text: text
+        });
+    }
+
+    filterItems = items => {
+        return items.filter(item => {
+            if (this.state.text === null || this.state.text.length === 0) {
+                return true;
+            } else {
+                return item.value.indexOf(this.state.text) !== -1;
+            }
+        });
+    }
+
+    convertToDomListItem = item => {
+        return (
+            <ListItem button key={item.value}>
+                <Checkbox checked={item.isSelected} color="primary" onClick={() => this.props.toggleSelectedUser(item.value)} />
+                <ListItemText primary={item.value} />
+            </ListItem>
+        );
+    }
 }
 
 export default SearchAndSelectDrawer;
