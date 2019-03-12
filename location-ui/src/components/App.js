@@ -8,13 +8,24 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            drawerOpen: true
+        };
     }
+
+
+    toggleDrawer = () => {
+        this.setState({
+            drawerOpen: !this.state.drawerOpen
+        });
+    };
 
     render() {
         return (
             <>
-                <TitleBar />
-                <SearchAndSelectDrawer items={['John Snow', 'Daenerys Targaryen', 'Tyrion Lannister']} />
+                <TitleBar openMenu={this.toggleDrawer} />
+                <SearchAndSelectDrawer drawerOpen={this.state.drawerOpen} items={['John Snow', 'Daenerys Targaryen', 'Tyrion Lannister']} drawerToggle={this.toggleDrawer} />
                 <RawTextView />
             </>
         );

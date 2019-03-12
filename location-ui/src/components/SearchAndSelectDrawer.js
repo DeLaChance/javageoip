@@ -14,17 +14,10 @@ class SearchAndSelectDrawer extends React.Component {
         super(props);
 
         this.state = {
-            open: true,
             text: "",
             items: props.items
         }
     }
-
-    toggleDrawer = () => {
-        this.setState({
-            open: !this.state.open
-        })
-    };
 
     handleInputChange = event => {
         event.preventDefault();
@@ -46,12 +39,12 @@ class SearchAndSelectDrawer extends React.Component {
 
     render() {
         return (
-            <Drawer anchor="left" open={this.state.open}>
+            <Drawer anchor="left" open={this.props.drawerOpen} onClose={this.props.drawerToggle}>
                 <div tabIndex={0} role="button">
                     <List>
                         <SearchInput onChange={this.handleInputChange} />
                         {this.state.items.map(text => (
-                            <ListItem button key={text} onClick={this.toggleDrawer}>
+                            <ListItem button key={text} onClick={this.props.drawerToggle}>
                                 <ListItemIcon>
                                     <CheckBox />
                                 </ListItemIcon>

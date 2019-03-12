@@ -16,7 +16,7 @@ class TitleBar extends React.Component {
             <AppBar position="static">
                 <Toolbar>
                     <IconButton color="inherit" aria-label="Menu">
-                        <MenuIcon />
+                        <MenuIcon onClick={this.props.openMenu} />
                     </IconButton>
                     <Typography variant="h6" color="inherit">
                         Location Tracker
