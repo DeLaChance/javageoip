@@ -1,11 +1,10 @@
 import React from "react"
 import RawTextViewItem from "./RawTextViewItem"
-import paths from "../resources/static_paths.json"
 
 class RawTextView extends React.Component {
 
     constructor(props) {
-        super(props);
+		super(props);
     }
 
     render() {
@@ -17,7 +16,7 @@ class RawTextView extends React.Component {
                );
             });
 
-        const points = paths[0].map((point, pointIndex) => {
+        const points = [].map((point, pointIndex) => {
             return (
                 <RawTextViewItem key={point.timestamp}
                     value={point.longitude + " : " + point.latitude + " @ " + point.timestamp}/>

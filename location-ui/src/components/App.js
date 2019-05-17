@@ -4,7 +4,7 @@ import RawTextView from "./RawTextView"
 import TitleBar from "./TitleBar";
 import SearchAndSelectDrawer from "./SearchAndSelectDrawer"
 
-import SelectableUser from './SelectableUser'
+import SelectableUser from '../domain/SelectableUser'
 import SearchItem from "./SearchItem";
 
 class App extends React.Component {
@@ -14,7 +14,7 @@ class App extends React.Component {
 
         this.state = {
             drawerOpen: true,
-            users: [new SelectableUser('John Snow', false), new SelectableUser('Daenerys Targaryen', false), new SelectableUser('Tyrion Lannister', false)],
+            users: [],
         };
     }
 
