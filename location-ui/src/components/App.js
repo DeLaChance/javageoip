@@ -3,9 +3,10 @@ import React from "react"
 import RawTextView from "./RawTextView"
 import TitleBar from "./TitleBar";
 import SearchAndSelectDrawer from "./SearchAndSelectDrawer"
-
-import SelectableUser from '../domain/SelectableUser'
+import User from "../domain/User"
 import SearchItem from "./SearchItem";
+
+import httpService from "../service/HttpService"
 
 class App extends React.Component {
 
@@ -15,8 +16,20 @@ class App extends React.Component {
         this.state = {
             drawerOpen: true,
             users: [],
+			userIdToPathMap: new Map([]),
+			selectedUserNames: new Set([])
         };
     }
+
+	componentDidMount() {
+		console.log("App has mounted.")
+
+		httpService.fetchAllUsers(users => {
+			this.setState({
+				users: users
+			});
+		});
+	}
 
     toggleDrawer = () => {
         this.setState({
@@ -24,25 +37,47 @@ class App extends React.Component {
         });
     };
 
-    toggleSelectedUser = userName => {
+    toggleSelectedUser = name => {
+		const newValue = new Set(this.state.selectedUserNames.entries());
+		if (newValue.has(name)) {
+			newValue.delete(name);
+		} else {
+			newValue.add(name);
+		}
+
         this.setState({
-            users: this.state.users.map(user => {
-                if (user.userName === userName) {
-                    return new SelectableUser(userName, !user.isSelected)
-                } else {
-                    return user;
-                }
-            })
-        });
+			selectedUserNames: newValue
+		});
+
+		this.state.users.filter(user => user.name === name)
+			.forEach(user => this.fetchPathForUser(user.id));
     };
+
+	fetchPathForUser = userId => {
+		httpService.fetchPathByUserId((userId, path => {
+			this.setState((prevState, props) => ({
+				userIdToPathMap: prevState.userIdToPathMap.set(userId, path)
+			}));
+		}));
+	}
 
     render() {
         return (
             <>
                 <TitleBar openMenu={this.toggleDrawer} />
-                <SearchAndSelectDrawer drawerOpen={this.state.drawerOpen} items={this.state.users.map(user => new SearchItem(user.userName, user.isSelected))}
-                   drawerToggle={this.toggleDrawer} toggleSelectedUser={name => this.toggleSelectedUser(name)} />
-                <RawTextView users={this.state.users} />
+                <SearchAndSelectDrawer drawerOpen={this.state.drawerOpen}
+					items={
+						this.state.users.map(user =>
+							new SearchItem(user.name, this.state.selectedUserNames.has(user.name)))
+					}
+                   drawerToggle={this.toggleDrawer}
+				   toggleSelectedUser={name => this.toggleSelectedUser(name)}
+			    />
+                <RawTextView users={
+						this.state.users.filter(user => this.state.selectedUserNames.has(user.name))
+					}
+					points={this.state.userIdToPathMap}
+				/>
             </>
         );
     }

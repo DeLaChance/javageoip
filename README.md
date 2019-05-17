@@ -11,7 +11,7 @@ Gradle
 
 # TODO:
 1. Finish React-based frontend
-- REST call, if fail fall back to mock data
+- Fix bug with pathsMap
 - Use a live Google map instead of pure text
 2. Rewrite Kotlin app into Java app
 3. Deploy location-cloud and location-tracker to Google App Engine

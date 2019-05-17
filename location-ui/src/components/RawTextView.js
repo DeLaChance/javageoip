@@ -8,25 +8,17 @@ class RawTextView extends React.Component {
     }
 
     render() {
-        const users = this.props.users
-            .filter(user => user.isSelected)
-            .map((user, index) => {
-               return (
-                   <RawTextViewItem key={user.userName} value={JSON.stringify(user)} />
-               );
-            });
-
-        const points = [].map((point, pointIndex) => {
-            return (
-                <RawTextViewItem key={point.timestamp}
-                    value={point.longitude + " : " + point.latitude + " @ " + point.timestamp}/>
-            );
+        const users = this.props.users.map((user, index) => {
+				return (
+					<>
+					   	<RawTextViewItem key={user.id} value={JSON.stringify(user)} />
+					</>
+				);
         });
 
         return (
             <>
                 <ul>{users}</ul>
-                <ul>{points}</ul>
             </>
         );
     }
