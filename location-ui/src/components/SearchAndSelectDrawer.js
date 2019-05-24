@@ -5,7 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import SearchInput from './SearchInput/SearchInput'
+import SearchInput from './SearchInput'
 
 class SearchAndSelectDrawer extends React.Component {
 

@@ -1,12 +1,13 @@
 import React from "react"
 
-import RawTextView from "./RawTextView"
+import MapView from "./MapView"
 import TitleBar from "./TitleBar";
 import SearchAndSelectDrawer from "./SearchAndSelectDrawer"
 import User from "../domain/User"
 import SearchItem from "./SearchItem";
 
 import httpService from "../service/HttpService"
+import apiKeyJson from "../resources/apiKey.json"
 
 class App extends React.Component {
 
@@ -73,10 +74,11 @@ class App extends React.Component {
                    drawerToggle={this.toggleDrawer}
 				   toggleSelectedUser={name => this.toggleSelectedUser(name)}
 			    />
-                <RawTextView users={
+                <MapView users={
 						this.state.users.filter(user => this.state.selectedUserNames.has(user.name))
 					}
-					points={this.state.userIdToPathMap}
+					paths={this.state.userIdToPathMap}
+					apiKey={apiKeyJson.apiKey}
 				/>
             </>
         );
