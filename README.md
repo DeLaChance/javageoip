@@ -1,6 +1,4 @@
 LocationApp
-
-
 The app should be able to trace a users location over time and give notification based on this location.
 
 # Technologies:
@@ -11,7 +9,6 @@ Gradle
 
 # TODO:
 1. Finish React-based frontend
-- Use a live Google map instead of pure text
 2. Rewrite Kotlin app into Java app
 3. Deploy location-cloud and location-tracker to Google App Engine
 

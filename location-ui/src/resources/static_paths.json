@@ -8,65 +8,40 @@
         "maxNumberOfPages": 1,
         "geolocations": [
 			{
-				"longitude": 14.23657684326172,
-				"latitude": 16.060134983062744,
-				"timestamp": 1549467150312
-			},
+                "latitude": 51.4416,
+                "longitude": 5.4697,
+                "timestamp": 1549467150312
+            },
 			{
-				"longitude": 14.232518005371094,
-				"latitude": 16.063134288787842,
-				"timestamp": 1549467160320
-			},
+                "latitude": 51.4416,
+                "longitude": 8.4697,
+                "timestamp": 1549467151312
+            },
 			{
-				"longitude": 14.232518005371094,
-				"latitude": 16.063134288787842,
-				"timestamp": 1549467160320
-			},
+                "latitude": 48.4416,
+                "longitude": 12.4697,
+                "timestamp": 1549467152312
+            },
 			{
-				"longitude": 14.235585021972656,
-				"latitude": 16.053323841094971,
-				"timestamp": 1549467170322
-			},
+                "latitude": 47.0,
+                "longitude": 15.0,
+                "timestamp": 1549467160312
+            },
 			{
-				"longitude": 14.235585021972656,
-				"latitude": 15.053323841094971,
-				"timestamp": 1549467170322
-			},
+                "latitude": 47.2,
+                "longitude": 20.0,
+                "timestamp": 1549467170312
+            },
 			{
-				"longitude": 14.23351745605469,
-				"latitude": 15.057280158996582,
-				"timestamp": 1549467180323
-			},
+                "latitude": 47.2,
+                "longitude": 24.0,
+                "timestamp": 1549467200312
+            },
 			{
-				"longitude": 14.23804168701172,
-				"latitude": 15.069076156616211,
-				"timestamp": 1549467216111
-			},
-			{
-				"longitude": 14.24228744506836,
-				"latitude": 15.0716105461120605,
-				"timestamp": 1549467226116
-			},
-			{
-				"longitude": 14.24228744506836,
-				"latitude": 15.0716105461120605,
-				"timestamp": 1549467226116
-			},
-			{
-				"longitude": 14.25093536376953,
-				"latitude": 15.067003345489502,
-				"timestamp": 1549467236118
-			},
-			{
-				"longitude": 14.25093536376953,
-				"latitude": 15.067003345489502,
-				"timestamp": 1549467236118
-			},
-			{
-				"longitude": 14.24596481323242,
-				"latitude": 15.0601569175720215,
-				"timestamp": 1549467246119
-			}
+                "latitude": 50.4501,
+                "longitude": 30.5234,
+                "timestamp": 1549467200312
+            }
         ]
     },
     {
@@ -77,65 +52,60 @@
         "pageNumber": 0,
         "maxNumberOfPages": 1,
         "geolocations": [
-            {
-                "longitude": 15.43657684326172,
-                "latitude": 5.460134983062744,
+			{
+                "latitude": 51.4416,
+                "longitude": 5.4697,
                 "timestamp": 1549467150312
             },
-            {
-                "longitude": 15.432518005371094,
-                "latitude": 5.463134288787842,
-                "timestamp": 1549467160320
+			{
+				"latitude": 51.4416,
+                "longitude": 5.5697,
+                "timestamp": 1549467150412
             },
-            {
-                "longitude": 15.432518005371094,
-                "latitude": 5.463134288787842,
-                "timestamp": 1549467160320
+			{
+				"latitude": 51.5416,
+                "longitude": 5.5697,
+                "timestamp": 1549467150512
             },
-            {
-                "longitude": 15.435585021972656,
-                "latitude": 5.453323841094971,
-                "timestamp": 1549467170322
+			{
+				"latitude": 51.6416,
+                "longitude": 5.5997,
+                "timestamp": 1549467150612
             },
-            {
-                "longitude": 15.435585021972656,
-                "latitude": 5.453323841094971,
-                "timestamp": 1549467170322
+			{
+				"latitude": 55.6761,
+                "longitude": 12.5683,
+                "timestamp": 1549467151612
             },
-            {
-                "longitude": 15.43351745605469,
-                "latitude": 5.457280158996582,
-                "timestamp": 1549467180323
+			{
+				"latitude": 57.416,
+                "longitude": 12.5997,
+                "timestamp": 1549467153612
             },
-            {
-                "longitude": 15.43804168701172,
-                "latitude": 5.469076156616211,
-                "timestamp": 1549467216111
+			{
+				"latitude": 59.3289,
+                "longitude": 18.0649,
+                "timestamp": 1549467155612
             },
-            {
-                "longitude": 15.44228744506836,
-                "latitude": 5.4716105461120605,
-                "timestamp": 1549467226116
+			{
+				"latitude": 61.3289,
+                "longitude": 17.5,
+                "timestamp": 1549467155912
             },
-            {
-                "longitude": 15.44228744506836,
-                "latitude": 5.4716105461120605,
-                "timestamp": 1549467226116
+			{
+				"latitude": 63.0,
+                "longitude": 17.0,
+                "timestamp": 1549467656612
             },
-            {
-                "longitude": 15.45093536376953,
-                "latitude": 5.467003345489502,
-                "timestamp": 1549467236118
+			{
+				"latitude": 65.0,
+                "longitude": 17.0,
+                "timestamp": 1549468157612
             },
-            {
-                "longitude": 15.45093536376953,
-                "latitude": 5.467003345489502,
-                "timestamp": 1549467236118
-            },
-            {
-                "longitude": 15.44596481323242,
-                "latitude": 5.4601569175720215,
-                "timestamp": 1549467246119
+			{
+				"latitude": 66.0,
+                "longitude": 17.1,
+                "timestamp": 1549469158612
             }
         ]
     },
@@ -148,64 +118,59 @@
         "maxNumberOfPages": 1,
         "geolocations": [
             {
-                "longitude": 51.43657684326172,
-                "latitude": 20.560134983062744,
+                "latitude": 51.4416,
+                "longitude": 5.4697,
                 "timestamp": 1549467150312
             },
-            {
-                "longitude": 51.432518005371094,
-                "latitude": 20.563134288787842,
-                "timestamp": 1549467160320
+			{
+				"latitude": 51.4416,
+                "longitude": 5.5697,
+                "timestamp": 1549467150412
             },
-            {
-                "longitude": 51.432518005371094,
-                "latitude": 20.563134288787842,
-                "timestamp": 1549467160320
+			{
+				"latitude": 51.5416,
+                "longitude": 5.5697,
+                "timestamp": 1549467150512
             },
-            {
-                "longitude": 51.435585021972656,
-                "latitude": 20.553323841094971,
-                "timestamp": 1549467170322
+			{
+				"latitude": 51.6416,
+                "longitude": 5.5997,
+                "timestamp": 1549467150612
             },
-            {
-                "longitude": 51.435585021972656,
-                "latitude": 15.053323841094971,
-                "timestamp": 1549467170322
+			{
+				"latitude": 53.6416,
+                "longitude": 6.5997,
+                "timestamp": 1549467151612
             },
-            {
-                "longitude": 51.43351745605469,
-                "latitude": 15.057280158996582,
-                "timestamp": 1549467180323
+			{
+				"latitude": 55.6416,
+                "longitude": 8.5997,
+                "timestamp": 1549467152612
             },
-            {
-                "longitude": 51.43804168701172,
-                "latitude": 15.069076156616211,
-                "timestamp": 1549467216111
+			{
+				"latitude": 57.416,
+                "longitude": 12.5997,
+                "timestamp": 1549467153612
             },
-            {
-                "longitude": 51.44228744506836,
-                "latitude": 15.0716105461120605,
-                "timestamp": 1549467226116
+			{
+				"latitude": 60.416,
+                "longitude": 13.0,
+                "timestamp": 1549467155612
             },
-            {
-                "longitude": 51.44228744506836,
-                "latitude": 15.0716105461120605,
-                "timestamp": 1549467226116
+			{
+				"latitude": 70.0,
+                "longitude": 12.0,
+                "timestamp": 1549467656612
             },
-            {
-                "longitude": 51.45093536376953,
-                "latitude": 15.067003345489502,
-                "timestamp": 1549467236118
+			{
+				"latitude": 80.0,
+                "longitude": 11.0,
+                "timestamp": 1549468157612
             },
-            {
-                "longitude": 51.45093536376953,
-                "latitude": 15.067003345489502,
-                "timestamp": 1549467236118
-            },
-            {
-                "longitude": 51.44596481323242,
-                "latitude": 15.0601569175720215,
-                "timestamp": 1549467246119
+			{
+				"latitude": 88.0,
+                "longitude": 10.0,
+                "timestamp": 1549469158612
             }
         ]
     }

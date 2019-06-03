@@ -27,8 +27,8 @@ class HttpService {
 		}).on('error', error => {
 			var matchingPaths = staticPaths.filter(path => path.id === userId)
 				.map(path => path.geolocations.map(geolocation =>
-					new TimedGeoLocation(geolocation.latitude, geolocation.longitude,
-						geolocation.timestamp)
+					new TimedGeoLocation(geolocation.timestamp, geolocation.latitude,
+						geolocation.longitude)
 				));
 
 			var pathForUser = null;

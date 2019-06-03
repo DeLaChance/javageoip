@@ -15,7 +15,7 @@ const {
 	Polyline
 } = require("react-google-maps");
 
-const EINDHOVEN_GEOLOCATION = new GoogleGeoLocation(51.4416, 5.4697);
+const DEFAULT_MAPCENTER = new GoogleGeoLocation(51.4416, 5.4697);
 
 class MapView extends React.Component {
 
@@ -26,31 +26,23 @@ class MapView extends React.Component {
 		return url;
 	}
 
-	findCenter = () => {
-		var center;
-		if (this.props.userPaths.length === 0) {
-			center = EINDHOVEN_GEOLOCATION;
+	determinePathCoordinates = () => {
+		var path;
+		if (this.props.userPaths.length > 0 && this.props.userPaths[0].timedGeoLocations
+			&& this.props.userPaths[0].timedGeoLocations.length > 0) {
+
+			path = this.props.userPaths[0]
+				.timedGeoLocations.map(timedGeoLocation => timedGeoLocation.toGoogleGeoLocation());
 		} else {
-			var userPath = this.props.userPaths[0];
-			if (userPath && userPath.timedGeoLocations.length > 0) {
-				center = userPath.timedGeoLocations[0].toGoogleGeoLocation();
-			} else {
-				center = EINDHOVEN_GEOLOCATION;
-			}
+			path = [];
 		}
 
-		return center;
+		return path;
 	}
 
     render() {
-		const mapCenter = this.findCenter();
-
-		const flightPlanCoordinates = [
-          {lat: 37.772, lng: -122.214},
-          {lat: 21.291, lng: -157.821},
-          {lat: -18.142, lng: 178.431},
-          {lat: -27.467, lng: 153.027}
-        ];
+		const userPathCoordinates = this.determinePathCoordinates();
+		const mapCenter = userPathCoordinates.length > 0 ? userPathCoordinates[0] : DEFAULT_MAPCENTER;
 
 		const MyMapComponent = compose(
 			withProps({
@@ -64,14 +56,13 @@ class MapView extends React.Component {
 		) ((props) => {
 			return (
 				<GoogleMap defaultZoom={3} defaultCenter={mapCenter}>
-					{
-						props.isMarkerShown && <Marker position={mapCenter} />
-					}
-					<Polyline path={flightPlanCoordinates} options={{
-						strokeColor: '#FF0000',
-						strokeWeight: 2,
-						strokeOpacity: 1.0
-					}} />
+					{userPathCoordinates.length > 0 && <Marker position={mapCenter} />}
+					<Polyline path={userPathCoordinates} options={{
+							strokeColor: '#FF0000',
+							strokeWeight: 2,
+							strokeOpacity: 1.0
+						}}
+					/>
 				</GoogleMap>
 			);
 	  	});
