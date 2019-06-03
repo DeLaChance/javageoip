@@ -39,15 +39,20 @@ class App extends React.Component {
     };
 
     toggleSelectedUser = name => {
-		const newValue = new Set(this.state.selectedUserNames.entries());
-		if (newValue.has(name)) {
-			newValue.delete(name);
+		// Copy old set into new set
+		const newSelectedUserNameSet = new Set();
+		this.state.selectedUserNames.forEach(userName => {
+			newSelectedUserNameSet.add(userName);
+		});
+
+		if (newSelectedUserNameSet.has(name)) {
+			newSelectedUserNameSet.delete(name);
 		} else {
-			newValue.add(name);
+			newSelectedUserNameSet.add(name);
 		}
 
         this.setState({
-			selectedUserNames: newValue
+			selectedUserNames: newSelectedUserNameSet
 		});
 
 		this.state.users.filter(user => user.name === name)
@@ -66,8 +71,6 @@ class App extends React.Component {
     render() {
 		const selectedUsers = this.state.users.filter(user => this.state.selectedUserNames.has(user.name));
 		const userPaths = selectedUsers.map(user => new UserPath(user, this.state.userIdToPathMap.get(user.id)));
-
-		console.log(userPaths);
 
         return (
             <>

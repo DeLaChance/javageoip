@@ -21,24 +21,25 @@ class HttpService {
 
 	fetchPathByUserId = (userId, callback) => {
 		var url = this.baseurl + "path/" + userId;
-		request.get(url).on('data', data => {
-			var pathForUser = data.geolocations;
-			callback(pathForUser);
+		request.get(url).on('data', pathData => {
+			var parsedPath = this.parsePathData(pathData);
+			callback(parsedPath);
 		}).on('error', error => {
-			var matchingPaths = staticPaths.filter(path => path.id === userId)
-				.map(path => path.geolocations.map(geolocation =>
-					new TimedGeoLocation(geolocation.timestamp, geolocation.latitude,
-						geolocation.longitude)
-				));
+			var matchingPaths = staticPaths.filter(path => path.id === userId);
 
-			var pathForUser = null;
 			if (matchingPaths.length > 0) {
-				pathForUser = matchingPaths[0];
-				callback(pathForUser);
+				var parsedPath = this.parsePathData(matchingPaths[0]);
+				callback(parsedPath);
 			}
 		});
 	};
 
+	parsePathData(pathData) {
+		return pathData.geolocations.map(geolocation =>
+			new TimedGeoLocation(geolocation.timestamp, geolocation.latitude,
+				geolocation.longitude)
+		);
+	}
 }
 
 export default new HttpService();

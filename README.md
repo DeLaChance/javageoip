@@ -8,9 +8,8 @@ Kotlin + Micronaut
 Gradle
 
 # TODO:
-1. Finish React-based frontend
-2. Rewrite Kotlin app into Java app
-3. Deploy location-cloud and location-tracker to Google App Engine
+1. Rewrite Kotlin app into Java app
+2. Deploy location-cloud and location-tracker to Google App Engine
 
 # Requirements:
 1. You should be able to add a user to follow via REST endpoint.
@@ -19,6 +18,7 @@ Gradle
 4. You should be able to receive notifications on SMS whenever a user leaves a certain defined area.
 5. You should be able to query a users location over a specified period of time.
 6. Visualize 4+5 using a map in a browser.
+7. Do something with Lambda function
 
 
 # Data entities + REST API:

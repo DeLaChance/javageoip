@@ -16,6 +16,7 @@ const {
 } = require("react-google-maps");
 
 const DEFAULT_MAPCENTER = new GoogleGeoLocation(51.4416, 5.4697);
+const POLYLINE_COLORS = [ "#FF0000", "#00FF00", "#0000FF" ];
 
 class MapView extends React.Component {
 
@@ -26,23 +27,29 @@ class MapView extends React.Component {
 		return url;
 	}
 
-	determinePathCoordinates = () => {
-		var path;
-		if (this.props.userPaths.length > 0 && this.props.userPaths[0].timedGeoLocations
-			&& this.props.userPaths[0].timedGeoLocations.length > 0) {
+	toPolyLineWithMarker = (userPath, index) => {
+		const userPathCoordinates = userPath.timedGeoLocations.map(timedGeoLocation => timedGeoLocation.toGoogleGeoLocation());
+		var firstName = userPath.user.name.split(" ")[0];
 
-			path = this.props.userPaths[0]
-				.timedGeoLocations.map(timedGeoLocation => timedGeoLocation.toGoogleGeoLocation());
-		} else {
-			path = [];
-		}
-
-		return path;
+		return (
+			<>
+				<Polyline path={userPathCoordinates} options={{
+						strokeColor: POLYLINE_COLORS[index],
+						strokeWeight: 2,
+						strokeOpacity: 1.0
+					}}
+				/>
+				{userPathCoordinates.length > 0 && <Marker
+						position={userPathCoordinates[userPathCoordinates.length-1]}
+						label={firstName}
+					/>
+				}
+			</>
+		);
 	}
 
     render() {
-		const userPathCoordinates = this.determinePathCoordinates();
-		const mapCenter = userPathCoordinates.length > 0 ? userPathCoordinates[0] : DEFAULT_MAPCENTER;
+		const mapCenter = DEFAULT_MAPCENTER;
 
 		const MyMapComponent = compose(
 			withProps({
@@ -56,13 +63,7 @@ class MapView extends React.Component {
 		) ((props) => {
 			return (
 				<GoogleMap defaultZoom={3} defaultCenter={mapCenter}>
-					{userPathCoordinates.length > 0 && <Marker position={mapCenter} />}
-					<Polyline path={userPathCoordinates} options={{
-							strokeColor: '#FF0000',
-							strokeWeight: 2,
-							strokeOpacity: 1.0
-						}}
-					/>
+					{this.props.userPaths.map((userPath, index) => this.toPolyLineWithMarker(userPath, index))}
 				</GoogleMap>
 			);
 	  	});
