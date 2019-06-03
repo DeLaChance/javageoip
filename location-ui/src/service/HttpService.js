@@ -2,6 +2,7 @@ import request from "request"
 import config from "./http-config.json"
 import staticUsers from "../resources/static_users.json"
 import staticPaths from "../resources/static_paths.json"
+import TimedGeoLocation from "../domain/TimedGeoLocation"
 
 class HttpService {
 
@@ -24,11 +25,16 @@ class HttpService {
 			var pathForUser = data.geolocations;
 			callback(pathForUser);
 		}).on('error', error => {
-			var matchingPaths = staticPaths.filter(path => path.userId === userId);
+			var matchingPaths = staticPaths.filter(path => path.id === userId)
+				.map(path => path.geolocations.map(geolocation =>
+					new TimedGeoLocation(geolocation.latitude, geolocation.longitude,
+						geolocation.timestamp)
+				));
+
 			var pathForUser = null;
 			if (matchingPaths.length > 0) {
 				pathForUser = matchingPaths[0];
-				callback(pathForUser);				
+				callback(pathForUser);
 			}
 		});
 	};

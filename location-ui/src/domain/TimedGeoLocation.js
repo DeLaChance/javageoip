@@ -9,9 +9,11 @@ class TimedGeoLocation {
         this.timestamp = timestamp;
 		this.latitude = latitude;
 		this.longitude = longitude;
+
+		this.toGoogleGeoLocation = this.toGoogleGeoLocation.bind(this);
     }
 
-	toGoogleGeoLocation = () => {
+	toGoogleGeoLocation() {
 		return new GoogleGeoLocation(this.latitude, this.longitude);
 	}
 

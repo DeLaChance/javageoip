@@ -55,16 +55,19 @@ class App extends React.Component {
     };
 
 	fetchPathForUser = userId => {
-		httpService.fetchPathByUserId((userId, path => {
-			this.setState((prevState, props) => ({
+		var self = this;
+		httpService.fetchPathByUserId(userId, function(path) {
+			self.setState((prevState, props) => ({
 				userIdToPathMap: prevState.userIdToPathMap.set(userId, path)
 			}));
-		}));
+		});
 	}
 
     render() {
-		const userPaths = this.state.users.filter(user => this.state.selectedUserNames.has(user.name))
-			.map(user => new UserPath(user, this.state.userIdToPathMap[user.id]));
+		const selectedUsers = this.state.users.filter(user => this.state.selectedUserNames.has(user.name));
+		const userPaths = selectedUsers.map(user => new UserPath(user, this.state.userIdToPathMap.get(user.id)));
+
+		console.log(userPaths);
 
         return (
             <>
