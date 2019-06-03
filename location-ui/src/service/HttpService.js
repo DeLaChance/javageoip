@@ -1,5 +1,3 @@
-
-
 import request from "request"
 import config from "./http-config.json"
 import staticUsers from "../resources/static_users.json"
@@ -26,13 +24,12 @@ class HttpService {
 			var pathForUser = data.geolocations;
 			callback(pathForUser);
 		}).on('error', error => {
-			var matchingPaths = staticPaths.filter(path => path.userId == userId);
+			var matchingPaths = staticPaths.filter(path => path.userId === userId);
 			var pathForUser = null;
 			if (matchingPaths.length > 0) {
 				pathForUser = matchingPaths[0];
+				callback(pathForUser);				
 			}
-
-			callback(staticPaths);
 		});
 	};
 

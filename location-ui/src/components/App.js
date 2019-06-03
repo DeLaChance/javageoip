@@ -3,7 +3,7 @@ import React from "react"
 import MapView from "./MapView"
 import TitleBar from "./TitleBar";
 import SearchAndSelectDrawer from "./SearchAndSelectDrawer"
-import User from "../domain/User"
+import UserPath from "../domain/UserPath";
 import SearchItem from "./SearchItem";
 
 import httpService from "../service/HttpService"
@@ -23,7 +23,7 @@ class App extends React.Component {
     }
 
 	componentDidMount() {
-		console.log("App has mounted.")
+		console.log("App has mounted.");
 
 		httpService.fetchAllUsers(users => {
 			this.setState({
@@ -63,6 +63,9 @@ class App extends React.Component {
 	}
 
     render() {
+		const userPaths = this.state.users.filter(user => this.state.selectedUserNames.has(user.name))
+			.map(user => new UserPath(user, this.state.userIdToPathMap[user.id]));
+
         return (
             <>
                 <TitleBar openMenu={this.toggleDrawer} />
@@ -74,12 +77,7 @@ class App extends React.Component {
                    drawerToggle={this.toggleDrawer}
 				   toggleSelectedUser={name => this.toggleSelectedUser(name)}
 			    />
-                <MapView users={
-						this.state.users.filter(user => this.state.selectedUserNames.has(user.name))
-					}
-					paths={this.state.userIdToPathMap}
-					apiKey={apiKeyJson.apiKey}
-				/>
+                <MapView userPaths={userPaths} apiKey={apiKeyJson.apiKey} />
             </>
         );
     }

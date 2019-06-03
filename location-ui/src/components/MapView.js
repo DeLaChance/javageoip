@@ -1,5 +1,7 @@
 import React from "react"
 
+import GoogleGeoLocation from "../domain/GoogleGeoLocation"
+
 const {
 	compose,
 	withProps
@@ -13,12 +15,9 @@ const {
 	Polyline
 } = require("react-google-maps");
 
-const { DrawingManager } = require("react-google-maps/lib/components/drawing/DrawingManager");
-class MapView extends React.Component {
+const EINDHOVEN_GEOLOCATION = new GoogleGeoLocation(51.4416, 5.4697);
 
-    constructor(props) {
-		super(props);
-    }
+class MapView extends React.Component {
 
 	generateUrl = () => {
 		var url = "https://maps.googleapis.com/maps/api/js?key=" + this.props.apiKey +
@@ -27,7 +26,25 @@ class MapView extends React.Component {
 		return url;
 	}
 
+	findCenter = () => {
+		var center;
+		if (this.props.userPaths.length === 0) {
+			center = EINDHOVEN_GEOLOCATION;
+		} else {
+			var userPath = this.props.userPaths[0];
+			if (userPath && userPath.timedGeoLocations.length > 0) {
+				center = userPath.timedGeoLocations[0].toGoogleGeoLocation();
+			} else {
+				center = EINDHOVEN_GEOLOCATION;
+			}
+		}
+
+		return center;
+	}
+
     render() {
+		const mapCenter = this.findCenter();
+
 		const flightPlanCoordinates = [
           {lat: 37.772, lng: -122.214},
           {lat: 21.291, lng: -157.821},
@@ -45,12 +62,10 @@ class MapView extends React.Component {
 			withScriptjs,
 			withGoogleMap
 		) ((props) => {
-			const google = window.google;
-
 			return (
-				<GoogleMap defaultZoom={3} defaultCenter={{ lat: 37.772, lng: -122.214 }}>
+				<GoogleMap defaultZoom={3} defaultCenter={mapCenter}>
 					{
-						props.isMarkerShown && <Marker position={{ lat: 37.772, lng: -122.214 }} />
+						props.isMarkerShown && <Marker position={mapCenter} />
 					}
 					<Polyline path={flightPlanCoordinates} options={{
 						strokeColor: '#FF0000',

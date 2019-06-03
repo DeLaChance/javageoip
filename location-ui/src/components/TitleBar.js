@@ -7,10 +7,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 class TitleBar extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <AppBar position="static">
