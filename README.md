@@ -1,24 +1,29 @@
 LocationApp
 The app should be able to trace a users location over time and give notification based on this location.
 
+
 # Technologies:
 Google Cloud
 React
 Kotlin + Micronaut
 Gradle
+C#
 
 # TODO:
-1. Rewrite Kotlin app into Java app
-2. Deploy location-cloud and location-tracker to Google App Engine
+1. Write Kotlin Vert.x app for backend replacing 'location-cloud' (Requirements 1., 2. and 5.)
+2. Deploy location-cloud to Google App Engine (Requirements 3.)
+3. Requirement 4.
+4. Requirement 6.
+5. Write an instance of location-tracker in C# + Integration between both
+
 
 # Requirements:
 1. You should be able to add a user to follow via REST endpoint.
 2. User should send updates to a REST endpoint to give its location.
 3. The system should (auto-)scale well with the number of users.
-4. You should be able to receive notifications on SMS whenever a user leaves a certain defined area.
+4. You should be able to receive notifications on SMS/email whenever a user leaves a certain defined area.
 5. You should be able to query a users location over a specified period of time.
-6. Visualize 4+5 using a map in a browser.
-7. Do something with Lambda function
+6. Lambda function indicating countries + locations that were visited over last month
 
 
 # Data entities + REST API:
