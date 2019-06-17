@@ -5,15 +5,18 @@ import io.vertx.core.logging.LoggerFactory
 import io.vertx.ext.web.Route
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
-import io.vertx.kotlin.core.eventbus.sendAwait
 import io.vertx.kotlin.core.http.listenAwait
 import io.vertx.kotlin.coroutines.CoroutineVerticle
 import io.vertx.kotlin.coroutines.dispatcher
 import kotlinx.coroutines.launch
+import nl.cloud.location.user.Factory
+import nl.cloud.location.user.UserService
 
 class HttpVerticle : CoroutineVerticle() {
 
 	val logger: Logger = LoggerFactory.getLogger(HttpVerticle::class.qualifiedName)
+
+	lateinit var userService: UserService
 
 	// Called when verticle is deployed
 	override suspend fun start() {
@@ -26,6 +29,8 @@ class HttpVerticle : CoroutineVerticle() {
 	        .requestHandler(router)
 			.listenAwait(port)
 
+		val userService = Factory.createWithProxy(vertx);
+
 		logger.info("Http server is running on port %s", port)
 	}
 
@@ -36,7 +41,6 @@ class HttpVerticle : CoroutineVerticle() {
 	private fun generateRouter(): Router {
 		val router = Router.router(vertx)
 		router.get("/api/user/").coroutineHandler { context ->
-			var reply = vertx.eventBus().sendAwait<String>("fetch.all.users", "")
 		}
 
 		return router
