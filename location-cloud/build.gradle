@@ -30,7 +30,7 @@ repositories {
 	}
 }
 
-version = '3.7.1'
+version = '0.1'
 sourceCompatibility = '1.8'
 mainClassName = 'io.vertx.core.Launcher'
 
@@ -38,12 +38,15 @@ dependencies {
 	compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
 	compile "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
 
-	compile "io.vertx:vertx-core:${vertxVersion}"
 	compile "io.vertx:vertx-lang-kotlin:${vertxVersion}"
+	compile "io.vertx:vertx-core:${vertxVersion}"
+    compile "io.vertx:vertx-web:${vertxVersion}"
+	compile "io.vertx:vertx-lang-kotlin-coroutines:${vertxVersion}"
 }
 
 shadowJar {
-	classifier = 'fat'
+	classifier = ''
+	baseName = 'location-cloud'
   	manifest {
     	attributes 'Main-Verticle': 'nl.cloud.location.adapter.HttpVerticle'
   	}
