@@ -17,7 +17,7 @@ interface UserService {
 }
 
 @GenIgnore
-object Factory {
+object UserServiceFactory {
 
     val EVENT_BUS_ADDRESS = "nl.cloud.location.user.UserServiceImpl"
 

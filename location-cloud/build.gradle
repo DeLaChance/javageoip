@@ -52,7 +52,7 @@ shadowJar {
 	classifier = ''
 	baseName = 'location-cloud'
   	manifest {
-    	attributes 'Main-Verticle': 'nl.cloud.location.adapter.HttpVerticle'
+    	attributes 'Main-Verticle': 'nl.cloud.location.configuration.MainVerticle'
   	}
 }
 

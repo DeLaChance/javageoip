@@ -10,9 +10,8 @@ import io.vertx.kotlin.core.http.listenAwait
 import io.vertx.kotlin.coroutines.CoroutineVerticle
 import io.vertx.kotlin.coroutines.awaitResult
 import io.vertx.kotlin.coroutines.dispatcher
-import io.vertx.serviceproxy.ServiceBinder
 import kotlinx.coroutines.launch
-import nl.cloud.location.user.Factory
+import nl.cloud.location.user.UserServiceFactory
 import nl.cloud.location.user.User
 import nl.cloud.location.user.UserService
 
@@ -28,15 +27,11 @@ class HttpVerticle : CoroutineVerticle() {
 		val port: Int = config.getInteger("http.port", 8081)
 
 		// Start the server
-	    val httpServer = vertx.createHttpServer()
+	    vertx.createHttpServer()
 	        .requestHandler(router)
 			.listenAwait(port)
 
-		ServiceBinder(vertx)
-			.setAddress(Factory.EVENT_BUS_ADDRESS)
-			.register(UserService::class.java, Factory.create())
-
-		userService = Factory.createWithProxy(vertx)
+		userService = UserServiceFactory.createWithProxy(vertx)
 
 		logger.info("Http server is running on port ${port}")
 	}
