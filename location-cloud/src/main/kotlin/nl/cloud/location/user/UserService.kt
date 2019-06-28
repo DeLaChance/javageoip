@@ -13,7 +13,7 @@ import io.vertx.core.Vertx
 interface UserService {
 
     fun findAll(handler: Handler<AsyncResult<List<User>>>)
-    fun findByName(name: String, handler: Handler<AsyncResult<@Nullable User>>)
+    fun findBy(userId: String, handler: Handler<AsyncResult<@Nullable User?>>)
 }
 
 @GenIgnore

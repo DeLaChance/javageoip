@@ -1,5 +1,6 @@
 package nl.cloud.location.adapter;
 
+import io.vertx.core.json.JsonArray
 import io.vertx.core.logging.Logger
 import io.vertx.core.logging.LoggerFactory
 import io.vertx.ext.web.Route
@@ -7,9 +8,12 @@ import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 import io.vertx.kotlin.core.http.listenAwait
 import io.vertx.kotlin.coroutines.CoroutineVerticle
+import io.vertx.kotlin.coroutines.awaitResult
 import io.vertx.kotlin.coroutines.dispatcher
+import io.vertx.serviceproxy.ServiceBinder
 import kotlinx.coroutines.launch
 import nl.cloud.location.user.Factory
+import nl.cloud.location.user.User
 import nl.cloud.location.user.UserService
 
 class HttpVerticle : CoroutineVerticle() {
@@ -18,7 +22,6 @@ class HttpVerticle : CoroutineVerticle() {
 
 	lateinit var userService: UserService
 
-	// Called when verticle is deployed
 	override suspend fun start() {
 
 		val router: Router = generateRouter()
@@ -29,18 +32,38 @@ class HttpVerticle : CoroutineVerticle() {
 	        .requestHandler(router)
 			.listenAwait(port)
 
-		val userService = Factory.createWithProxy(vertx);
+		ServiceBinder(vertx)
+			.setAddress(Factory.EVENT_BUS_ADDRESS)
+			.register(UserService::class.java, Factory.create())
 
-		logger.info("Http server is running on port %s", port)
+		userService = Factory.createWithProxy(vertx)
+
+		logger.info("Http server is running on port ${port}")
 	}
 
-	// Optional - called when verticle is undeployed
 	override suspend fun stop() {
 	}
 
 	private fun generateRouter(): Router {
 		val router = Router.router(vertx)
 		router.get("/api/user/").coroutineHandler { context ->
+			val users: List<User> = awaitResult { handler ->
+				userService.findAll(handler) }
+			val jsonBlob: String = users.map(User::toJson)
+				.fold(JsonArray()) { array, element -> array.add(element) }
+				.encodePrettily()
+
+			context.response().setStatusCode(200).end(jsonBlob)
+		}
+
+		router.get("/api/user/:userId").coroutineHandler { context ->
+			val userId: String = context.request().getParam("userId")
+			val user: User? = awaitResult { handler -> userService.findBy(userId, handler) }
+			if (user == null) {
+				context.response().setStatusCode(404).end("User with userid ${userId} not found")
+			} else {
+				context.response().setStatusCode(200).end(user.toJson().encodePrettily())
+			}
 		}
 
 		return router

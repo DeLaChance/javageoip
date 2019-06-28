@@ -56,16 +56,35 @@ shadowJar {
   	}
 }
 
+sourceSets {
+	generated {
+		java.srcDir "${projectDir}/src/generated/java"
+	}
+}
+
+task generateProxies(type: JavaCompile, group: 'build', description: 'Generates the Vertx proxies') {
+	source += sourceSets.main.kotlin
+	classpath = configurations.compile
+	options.compilerArgs = [
+			"-proc:only",
+			"-processor", "io.vertx.codegen.CodeGenProcessor",
+			"-AoutputDirectory=${projectDir}/src/main"
+	]
+	destinationDir = file("${projectDir}/build/generated/source/kapt/generated/")
+}
+
 compileKotlin {
+	dependsOn(generateProxies)
+
 	kotlinOptions {
-	    jvmTarget = '1.8'
-	    javaParameters = true
+		jvmTarget = '1.8'
+		javaParameters = true
 	}
 }
 
 compileTestKotlin {
 	kotlinOptions {
-	    jvmTarget = '1.8'
-	    javaParameters = true
+		jvmTarget = '1.8'
+		javaParameters = true
 	}
 }
