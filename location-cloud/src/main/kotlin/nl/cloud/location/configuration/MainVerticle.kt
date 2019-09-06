@@ -7,8 +7,8 @@ import io.vertx.kotlin.core.deployVerticleAwait
 import io.vertx.kotlin.coroutines.CoroutineVerticle
 import io.vertx.serviceproxy.ServiceBinder
 import nl.cloud.location.adapter.HttpVerticle
-import nl.cloud.location.user.UserServiceFactory
-import nl.cloud.location.user.UserService
+import nl.cloud.location.user.UserRepositoryFactory
+import nl.cloud.location.user.UserRepository
 import kotlin.reflect.KClass
 
 class MainVerticle : CoroutineVerticle() {
@@ -25,7 +25,7 @@ class MainVerticle : CoroutineVerticle() {
     }
 
     fun registerServices() {
-        registerService(UserService::class.java, UserServiceFactory.create(), UserServiceFactory.EVENT_BUS_ADDRESS)
+        registerService(UserRepository::class.java, UserRepositoryFactory.create(vertx), UserRepositoryFactory.EVENT_BUS_ADDRESS)
     }
 
     fun <T : Any> registerService(klass: Class<T>, implementation: T, eventBusAddress: String) {

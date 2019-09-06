@@ -11,15 +11,15 @@ import io.vertx.kotlin.coroutines.CoroutineVerticle
 import io.vertx.kotlin.coroutines.awaitResult
 import io.vertx.kotlin.coroutines.dispatcher
 import kotlinx.coroutines.launch
-import nl.cloud.location.user.UserServiceFactory
+import nl.cloud.location.user.UserRepositoryFactory
 import nl.cloud.location.user.User
-import nl.cloud.location.user.UserService
+import nl.cloud.location.user.UserRepository
 
 class HttpVerticle : CoroutineVerticle() {
 
 	val logger: Logger = LoggerFactory.getLogger(HttpVerticle::class.qualifiedName)
 
-	lateinit var userService: UserService
+	lateinit var userRepository: UserRepository
 
 	override suspend fun start() {
 
@@ -31,7 +31,7 @@ class HttpVerticle : CoroutineVerticle() {
 	        .requestHandler(router)
 			.listenAwait(port)
 
-		userService = UserServiceFactory.createWithProxy(vertx)
+		userRepository = UserRepositoryFactory.createWithProxy(vertx)
 
 		logger.info("Http server is running on port ${port}")
 	}
@@ -43,7 +43,7 @@ class HttpVerticle : CoroutineVerticle() {
 		val router = Router.router(vertx)
 		router.get("/api/user/").coroutineHandler { context ->
 			val users: List<User> = awaitResult { handler ->
-				userService.findAll(handler) }
+				userRepository.findAll(handler) }
 			val jsonBlob: String = users.map(User::toJson)
 				.fold(JsonArray()) { array, element -> array.add(element) }
 				.encodePrettily()
@@ -53,7 +53,7 @@ class HttpVerticle : CoroutineVerticle() {
 
 		router.get("/api/user/:userId").coroutineHandler { context ->
 			val userId: String = context.request().getParam("userId")
-			val user: User? = awaitResult { handler -> userService.findBy(userId, handler) }
+			val user: User? = awaitResult { handler -> userRepository.findBy(userId, handler) }
 			if (user == null) {
 				context.response().setStatusCode(404).end("User with userid ${userId} not found")
 			} else {

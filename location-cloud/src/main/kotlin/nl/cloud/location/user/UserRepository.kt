@@ -10,20 +10,23 @@ import io.vertx.core.Vertx
 
 @ProxyGen
 @VertxGen
-interface UserService {
+interface UserRepository {
+
+    fun addUser(user: User, handler: Handler<AsyncResult<@Nullable User>>)
 
     fun findAll(handler: Handler<AsyncResult<List<User>>>)
     fun findBy(userId: String, handler: Handler<AsyncResult<@Nullable User?>>)
+
 }
 
 @GenIgnore
-object UserServiceFactory {
+object UserRepositoryFactory {
 
-    val EVENT_BUS_ADDRESS = "nl.cloud.location.user.UserServiceImpl"
-
-    @JvmStatic
-    fun create(): UserService = UserServiceImpl()
+    val EVENT_BUS_ADDRESS = "nl.cloud.location.user.FileBasedUserRepository"
 
     @JvmStatic
-    fun createWithProxy(vertx: Vertx): UserService = UserServiceVertxEBProxy(vertx, EVENT_BUS_ADDRESS)
+    fun create(vertx: Vertx): UserRepository = FileBasedUserRepository(vertx)
+
+    @JvmStatic
+    fun createWithProxy(vertx: Vertx): UserRepository = UserRepositoryVertxEBProxy(vertx, EVENT_BUS_ADDRESS)
 }
