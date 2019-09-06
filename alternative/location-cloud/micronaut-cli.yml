@@ -1,5 +1,0 @@
-profile: service
-defaultPackage: location.cloud
----
-testFramework: spek
-sourceLanguage: kotlin
