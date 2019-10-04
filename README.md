@@ -4,7 +4,7 @@ The app should be able to trace a users location over time and give notification
 
 # Technologies:
 - React
-- Java + Sping 
+- Java + Spring 
 - Maven
 
 # Structure
@@ -20,13 +20,14 @@ The app should be able to trace a users location over time and give notification
 
 # Rest API
 GET:
-- `/api/user/` -> Fetches all users
-- `/api/user/:id` -> Fetches user info for user with id :id
-- `/api/path/:userid?startTime=XXX&endTime=YYY&pageSize=A&pageNumber=B` -> Fetches path of user between moments in time XXX and YYY
+- `/api/users/` -> Fetches all users
+- `/api/users/:id` -> Fetches user info for user with id `:id`
+
+- `/api/paths/` -> Fetches all paths
+- `/api/paths/:userid?startTime=XXX&endTime=YYY&pageSize=A&pageNumber=B` -> Fetches path of user between moments in time XXX and YYY
 
 POST:
-- `/api/user/` -> Creates user
-- `/api/user/` -> Updates path of user
+- `/api/users/` -> Creates user
 
 
 # Data entities
