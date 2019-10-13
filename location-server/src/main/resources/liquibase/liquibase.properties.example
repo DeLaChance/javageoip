@@ -1,0 +1,5 @@
+driver: org.postgresql.Driver
+url: jdbc:postgresql://${POSTGRES_HOST}:5432/location-server
+username: ${POSTGRES_USER}
+password: ${POSTGRES_PASSWORD}
+changeLogFile: '1.0-changelog.xml'

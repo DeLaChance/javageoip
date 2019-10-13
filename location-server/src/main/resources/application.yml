@@ -1,6 +1,13 @@
 spring:
   application:
-      name: location-server
+    name: location-server
+  data:
+    postgres:
+      host: ${POSTGRES_HOST}
+      post: '5432'
+      database: 'location-server'
+      username: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
 
 server:
   port: 9000

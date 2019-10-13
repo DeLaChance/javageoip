@@ -24,10 +24,10 @@ public class DummyController {
         .build();
 
     private static User TYRION_LANNISTER = User.builder()
-            .id(UUID.randomUUID().toString())
-            .name("Tyrion Lannister")
-            .keyWords(Arrays.asList("Imp", "Halfman"))
-            .build();
+        .id(UUID.randomUUID().toString())
+        .name("Tyrion Lannister")
+        .keyWords(Arrays.asList("Imp", "Halfman"))
+        .build();
 
     private static Location EINDHOVEN_LOCATION = Location.builder()
         .latitude(51.44)
@@ -38,8 +38,6 @@ public class DummyController {
         .latitude(51.28)
         .longitude(5.39)
         .build();
-
-    private static Path PATH = generatePath(EINDHOVEN_LOCATION, JOHN_SNOW, 100);
 
     @GetMapping("/users")
     public Flux<User> getUsers() {
