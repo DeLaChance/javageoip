@@ -18,6 +18,7 @@
 
   <properties>
     <spring.version>5.2.0.RELEASE</spring.version>
+    <skip.liquibase>false</skip.liquibase>
   </properties>
 
   <dependencies>
@@ -78,6 +79,8 @@
         <artifactId>liquibase-maven-plugin</artifactId>
         <configuration>
           <propertyFile>src/main/resources/liquibase/liquibase.properties</propertyFile>
+          <changeLogFile>src/main/resources/liquibase/db.changelog-master.xml</changeLogFile>
+          <skip>${skip.liquibase}</skip>
         </configuration>
         <executions>
           <execution>
