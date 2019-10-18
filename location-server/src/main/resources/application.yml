@@ -4,10 +4,11 @@ spring:
   data:
     postgres:
       host: ${POSTGRES_HOST}
-      post: '5432'
+      port: 5432
       database: 'location-server'
       username: ${POSTGRES_USER}
       password: ${POSTGRES_PASSWORD}
 
 server:
   port: 9000
+  connection-timeout: 1000

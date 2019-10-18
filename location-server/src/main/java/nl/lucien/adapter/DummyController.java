@@ -2,7 +2,6 @@ package nl.lucien.adapter;
 
 import nl.lucien.domain.Location;
 import nl.lucien.domain.Path;
-import nl.lucien.domain.TimedLocation;
 import nl.lucien.domain.User;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
-import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 @RestController
@@ -51,30 +52,29 @@ public class DummyController {
     }
 
     private static Path generatePath(Location startLocation, User user, int pathLength) {
-        Location location = startLocation;
-        List<TimedLocation> timedLocations = new ArrayList<>();
+        Random random = new Random();
+        List<Location> locations = new ArrayList<>();
+
+        Location oldLocation = startLocation;
         for (int i = 0; i < pathLength; i++) {
-            timedLocations.add(TimedLocation.builder()
-                .location(location)
-                .timestamp(Duration.ofHours(1).toSeconds() * i)
-                .build());
-            location = moveRandomDirection(location);
+            locations.add(oldLocation);
+
+            double horizontalOffset = (random.nextDouble() % 0.2) - 0.1;
+            double verticalOffset = (random.nextDouble() % 0.2) - 0.1;
+            Location newLocation = Location.builder()
+                .id(UUID.randomUUID().toString())
+                .longitude(oldLocation.getLongitude() - horizontalOffset)
+                .latitude(oldLocation.getLatitude() - verticalOffset)
+                .timestamp(ZonedDateTime.from(Instant.ofEpochSecond(i * 3600).atZone(ZoneId.of("UTC"))))
+                .build();
+
+            oldLocation = newLocation;
         }
 
         return Path.builder()
-            .locations(timedLocations)
+            .id(UUID.randomUUID().toString())
+            .locations(locations)
             .user(user)
-            .build();
-    }
-
-    private static Location moveRandomDirection(Location start) {
-        Random random = new Random();
-
-        double horizontalOffset = (random.nextDouble() % 0.2) - 0.1;
-        double verticalOffset = (random.nextDouble() % 0.2) - 0.1;
-        return Location.builder()
-            .longitude(start.getLongitude() - horizontalOffset)
-            .latitude(start.getLatitude() - verticalOffset)
             .build();
     }
 }

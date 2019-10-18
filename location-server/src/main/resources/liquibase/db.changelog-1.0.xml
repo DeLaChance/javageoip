@@ -25,22 +25,42 @@
             <column name="id" type="varchar(64)">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
+
             <column name="userid" type="varchar(64)">
                 <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="timestamp" type="timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="latitude" type="double">
-                <constraints nullable="false"/>
-            </column>
-            <column name="longitude" type="double">
-                <constraints nullable="false"/>
             </column>
 
             <addForeignKeyConstraint baseColumnNames="userid" baseTableName="user" constraintName="fk_user_path_id"
                 referencedColumnNames="id" referencedTableName="user"/>
 
+        </createTable>
+    </changeSet>
+
+    <changeSet author="lvalstar" id="create-path-table">
+        <createTable tableName="location" schemaName="public">
+
+            <column name="id" type="varchar(64)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+
+            <column name="pathid" type="varchar(64)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="timestamp" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="latitude" type="double">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="longitude" type="double">
+                <constraints nullable="false"/>
+            </column>
+
+            <addForeignKeyConstraint baseColumnNames="pathid" baseTableName="location" constraintName="fk_path_location_id"
+                referencedColumnNames="id" referencedTableName="path"/>
 
         </createTable>
     </changeSet>
