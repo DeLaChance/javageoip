@@ -2,6 +2,7 @@ package nl.lucien.domain;
 
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;
 import io.r2dbc.postgresql.PostgresqlResult;
+import io.r2dbc.spi.ConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
 import nl.lucien.adapter.UserDto;
 import org.reactivestreams.Publisher;

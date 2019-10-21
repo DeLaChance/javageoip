@@ -2,6 +2,7 @@ package nl.lucien.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import io.r2dbc.spi.Row;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class Path {
 
     private String id;
-    private User user;
+    private String userId;
     private List<Location> locations;
 
     @JsonPOJOBuilder(withPrefix = "")

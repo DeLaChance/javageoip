@@ -47,7 +47,7 @@
                 <constraints nullable="false" unique="true"/>
             </column>
 
-            <column name="timestamp" type="timestamp">
+            <column name="timestamp" type="int">
                 <constraints nullable="false"/>
             </column>
 

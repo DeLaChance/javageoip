@@ -3,16 +3,14 @@ package nl.lucien.domain;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import io.r2dbc.spi.Row;
+import lombok.Builder;
+import lombok.Data;
 import nl.lucien.adapter.UserDto;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
-
-import lombok.Builder;
-import lombok.Data;
 
 /**
  * Represents someone using this app.

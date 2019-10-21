@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.*;
 
 @RestController
@@ -65,7 +63,7 @@ public class DummyController {
                 .id(UUID.randomUUID().toString())
                 .longitude(oldLocation.getLongitude() - horizontalOffset)
                 .latitude(oldLocation.getLatitude() - verticalOffset)
-                .timestamp(ZonedDateTime.from(Instant.ofEpochSecond(i * 3600).atZone(ZoneId.of("UTC"))))
+                .timestamp(LocalDateTime.now().minusDays(3).toEpochSecond(ZoneOffset.UTC) + i * 3600L)
                 .build();
 
             oldLocation = newLocation;
@@ -74,7 +72,7 @@ public class DummyController {
         return Path.builder()
             .id(UUID.randomUUID().toString())
             .locations(locations)
-            .user(user)
+            .userId(user.getId())
             .build();
     }
 }
