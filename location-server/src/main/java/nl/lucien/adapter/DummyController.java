@@ -2,6 +2,7 @@ package nl.lucien.adapter;
 
 import nl.lucien.domain.Location;
 import nl.lucien.domain.Path;
+import nl.lucien.domain.PathMetaData;
 import nl.lucien.domain.User;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -70,9 +71,12 @@ public class DummyController {
         }
 
         return Path.builder()
-            .id(UUID.randomUUID().toString())
+            .pathMetadata(PathMetaData.builder()
+                .id(UUID.randomUUID().toString())
+                .userId(user.getId())
+                .length(pathLength)
+                .build())
             .locations(locations)
-            .userId(user.getId())
             .build();
     }
 }

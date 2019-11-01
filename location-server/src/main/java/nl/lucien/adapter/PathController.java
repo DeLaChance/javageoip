@@ -1,5 +1,6 @@
 package nl.lucien.adapter;
 
+import nl.lucien.domain.Path;
 import nl.lucien.domain.PathRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,5 +60,12 @@ public class PathController {
         }
 
         return monoResponseEntity;
+    }
+
+    @PostMapping("users/{userId}")
+    public Mono<ResponseEntity<Path>> createPath(@PathVariable String userId) {
+        return pathRepository.createPathFor(userId)
+            .map(path -> new ResponseEntity<>(path, HttpStatus.OK))
+            .onErrorReturn(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 }

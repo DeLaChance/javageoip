@@ -16,9 +16,15 @@ import java.util.List;
 @Data
 public class Path {
 
-    private String id;
-    private String userId;
+    private PathMetaData pathMetadata;
     private List<Location> locations;
+
+    public static Path from(PathMetaData pathMetaData, List<Location> locations) {
+        return Path.builder()
+            .pathMetadata(pathMetaData)
+            .locations(locations)
+            .build();
+    }
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class Builder {

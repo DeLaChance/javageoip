@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static java.lang.String.format;
 
@@ -19,9 +21,17 @@ import static java.lang.String.format;
 @Slf4j
 public class PathRepositoryImpl implements PathRepository {
 
-    private static final String FIND_PATH_METADATA_BY_PATHID = "select id, userid " +
-        "from public.path " +
-        "where id = $1";
+    private static final String FIND_PATH_METADATA_BY_PATHID = "select p.id, p.userid, count(*) as length\n" +
+        "from public.\"path\" as p\n" +
+        "inner join public.\"location\" as l on l.pathid = p.id\n" +
+        "where p.id = $1\n" +
+        "group by p.id, p.userid";
+
+    private static final String FIND_PATH_METADATA_BY_USERID = "select p.id, p.userid, count(*) as length\n" +
+        "from public.\"path\" as p\n" +
+        "inner join public.\"location\" as l on l.pathid = p.id\n" +
+        "where p.userid = $1\n" +
+        "group by p.id, p.userid";
 
     private static final String FIND_PATH_BY_ID = "select longitude, latitude, \"timestamp\"\n" +
         "from public.\"location\" \n" +
@@ -44,9 +54,9 @@ public class PathRepositoryImpl implements PathRepository {
 
     @Override
     public Flux<Path> queryPaths(PathQuery pathQuery) {
-        return findAllPathIdsByUserId(pathQuery.getUserId())
-            .flatMap(pathId -> queryLocationsBy(pathId, pathQuery)
-                .flatMap(locations -> buildPathFrom(locations, pathId))
+        return findAllPathMetaDataOfUserWith(pathQuery.getUserId())
+            .flatMap(pathMetaData -> queryLocationsBy(pathMetaData.getId(), pathQuery)
+                .flatMap(locations -> buildPathFrom(locations, pathMetaData.getId()))
             );
     }
 
@@ -54,17 +64,42 @@ public class PathRepositoryImpl implements PathRepository {
     public Mono<Path> findById(String pathId) {
         return queryLocationsBy(pathId, null)
             .flatMap(locations -> buildPathFrom(locations, pathId))
-            .doOnError(throwable -> log.error("Could not contruct path with id '{}' due to: ", pathId, throwable));
+            .doOnError(throwable -> log.error("Could not find path with id '{}' due to: ", pathId, throwable));
     }
 
+    @Override
+    public Mono<Path> createPathFor(String userId) {
+        String pathId = UUID.randomUUID().toString();
+        return connectionFactory.create().flatMapMany(connetion ->
+            connetion.createStatement("insert into public.path values ($1, $2)")
+                .bind("$1", pathId)
+                .bind("$2", userId)
+                .execute()
+        )
+        .doOnError(throwable -> log.error("Could not construct path for user'{}' due to: ", userId, throwable))
+        .next()
+        .flatMap(result -> result.getRowsUpdated()
+            .map(noOfRowsUpdated -> noOfRowsUpdated == 1)
+        ).flatMap(created -> {
+            Mono<Path> monoPath;
+            if (created) {
+                monoPath = findPathMetaDataByPathId(pathId)
+                    .map(pathMetaData -> Path.from(pathMetaData, Arrays.asList()));
+            } else {
+                monoPath = Mono.empty();
+            }
 
-    private Flux<String> findAllPathIdsByUserId(String userId) {
+            return monoPath;
+        });
+    }
+
+    private Flux<PathMetaData> findAllPathMetaDataOfUserWith(String userId) {
         return connectionFactory.create().flatMapMany(connection ->
-            connection.createStatement("select id from public.path where userid = $1")
+            connection.createStatement(FIND_PATH_METADATA_BY_USERID)
                 .bind("$1", userId)
                 .execute()
         )
-        .flatMap(result -> result.map((row, rowMetaData) -> row.get("id", String.class)));
+        .flatMap(result -> result.map((row, rowMetaData) -> PathMetaData.from(row)));
     }
 
     private Mono<List<Location>> queryLocationsBy(String pathId, PathQuery pathQuery) {
@@ -130,27 +165,18 @@ public class PathRepositoryImpl implements PathRepository {
     }
 
     private Mono<Path> buildPathFrom(List<Location> locations, String pathId) {
+        return findPathMetaDataByPathId(pathId)
+            .map(pathMetaData -> Path.from(pathMetaData, locations));
+    }
+
+    private Mono<PathMetaData> findPathMetaDataByPathId(String pathId) {
         return connectionFactory.create().flatMapMany(connection ->
             connection.createStatement(FIND_PATH_METADATA_BY_PATHID)
                 .bind("$1", pathId)
                 .execute()
-            )
-            .next()
-            .flatMap(result ->
-                result.map((row, rowMetaData) -> pathFromRow(row, locations)).next()
-            );
-    }
-
-    private Path pathFromRow(Row row, List<Location> locations) {
-        String id = row.get("id", String.class);
-        String userId = row.get("userid", String.class);
-
-        return Path.builder()
-            .id(id)
-            .userId(userId)
-            .locations(locations)
-            .build();
-
+        )
+        .next()
+        .flatMap(result -> result.map((row, rowMetaData) -> PathMetaData.from(row)).next());
     }
 
 }

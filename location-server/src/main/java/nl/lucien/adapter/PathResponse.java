@@ -1,6 +1,7 @@
 package nl.lucien.adapter;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
@@ -16,8 +17,8 @@ import java.util.stream.Collectors;
 @Data
 public class PathResponse {
 
-    private final String pathId;
-    private final String userId;
+    @JsonUnwrapped
+    private final PathMetadataDto pathMetadata;
     private final Long startTime;
     private final Long endTime;
     private final Integer pageSize;
@@ -27,8 +28,7 @@ public class PathResponse {
 
     public static PathResponse from(Path path) {
         return PathResponse.builder()
-            .pathId(path.getId())
-            .userId(path.getUserId())
+            .pathMetadata(PathMetadataDto.from(path.getPathMetadata()))
             .geolocations(path.getLocations()
                 .stream()
                 .map(LocationDto::from)
