@@ -3,11 +3,16 @@ package nl.lucien.configuration;
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
-import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+import org.springframework.context.annotation.Primary;
+
+import javax.sql.DataSource;
+
+import static java.lang.String.format;
 
 @Configuration
 @Slf4j
@@ -42,5 +47,17 @@ public class DatabaseConfiguration {
             .build();
 
         return new PostgresqlConnectionFactory(configuration);
+    }
+
+    @Bean
+    @Primary
+    public DataSource dataSource() {
+        return DataSourceBuilder.create()
+            .username(username)
+            .password(password)
+            .url(format("jdbc:postgresql://%s:%s/%s", host, port, database))
+            .driverClassName("org.postgresql.Driver")
+            .type(PGSimpleDataSource.class)
+            .build();
     }
 }

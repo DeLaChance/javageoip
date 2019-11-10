@@ -18,7 +18,7 @@
 
   <properties>
     <spring.version>5.2.0.RELEASE</spring.version>
-    <skip.liquibase>false</skip.liquibase>
+    <integration.tests.skip>false</integration.tests.skip>
   </properties>
 
   <dependencies>
@@ -58,12 +58,16 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+    </dependency>
+
   </dependencies>
 
   <build>
 
     <plugins>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -75,19 +79,20 @@
       </plugin>
 
       <plugin>
-        <groupId>org.liquibase</groupId>
-        <artifactId>liquibase-maven-plugin</artifactId>
-        <configuration>
-          <propertyFile>src/main/resources/liquibase/liquibase.properties</propertyFile>
-          <changeLogFile>src/main/resources/liquibase/db.changelog-master.xml</changeLogFile>
-          <skip>${skip.liquibase}</skip>
-        </configuration>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
         <executions>
           <execution>
-            <phase>process-resources</phase>
+            <id>add-integration-test-source-as-test-sources</id>
+            <phase>generate-test-sources</phase>
             <goals>
-              <goal>update</goal>
+              <goal>add-test-source</goal>
             </goals>
+            <configuration>
+              <sources>
+                <source>src/test/integration-test/java</source>
+              </sources>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -100,6 +105,19 @@
 
         <configuration>
           <mainClass>nl.lucien.LocationServerApplication</mainClass>
+        </configuration>
+      </plugin>
+
+      <!-- Runs integration tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+
+        <configuration>
+          <includes>
+            <include>**/*IT.java</include>
+          </includes>
+          <skip>{integration.tests.skip}</skip>
         </configuration>
       </plugin>
 
