@@ -2,6 +2,7 @@ package nl.lucien.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import io.r2dbc.spi.Row;
 import lombok.Builder;
 import lombok.Data;
 
@@ -22,6 +23,20 @@ public class Location {
     private Double longitude;
     private Double latitude;
     private Long timestamp; // unix timestamp (seconds since epoch)
+
+    private Location from(Row row) {
+        Double longitude = row.get("longitude", Double.class);
+        Double latitude = row.get("latitude", Double.class);
+        Long unixTimestamp = row.get("timestamp", Long.class);
+
+        Location location = Location.builder()
+                .latitude(latitude)
+                .longitude(longitude)
+                .timestamp(unixTimestamp)
+                .build();
+
+        return location;
+    }
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class Builder {

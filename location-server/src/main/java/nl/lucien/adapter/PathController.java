@@ -68,4 +68,11 @@ public class PathController {
             .map(path -> new ResponseEntity<>(path, HttpStatus.OK))
             .onErrorReturn(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
+
+    @PostMapping("{pathId}")
+    public Mono<ResponseEntity<Path>> addLocationToPath(@PathVariable String pathId, @RequestBody LocationDto locationDto) {
+        return pathRepository.addLocationToPath(pathId, locationDto)
+            .map(path -> new ResponseEntity<>(path, HttpStatus.OK))
+            .onErrorReturn(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+    }
 }

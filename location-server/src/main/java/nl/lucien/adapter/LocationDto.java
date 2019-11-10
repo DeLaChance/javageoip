@@ -1,11 +1,12 @@
 package nl.lucien.adapter;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Data;
 import nl.lucien.domain.Location;
 
-@JsonDeserialize(builder = PathResponse.Builder.class)
+@JsonDeserialize(builder = LocationDto.Builder.class)
 @Builder
 @Data
 public class LocationDto {
@@ -20,5 +21,9 @@ public class LocationDto {
             .latitude(location.getLatitude())
             .timestamp(location.getTimestamp())
             .build();
+    }
+
+    @JsonPOJOBuilder(withPrefix = "")
+    public static class Builder {
     }
 }

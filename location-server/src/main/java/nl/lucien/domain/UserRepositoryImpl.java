@@ -45,8 +45,10 @@ public class UserRepositoryImpl implements UserRepository {
         String query = "insert into public.user values ($1, $2, $3)";
         String[] args = new String[] { userId, userDto.getName(), userDto.keywordsAsString() };
 
-        return rdbcAdapter.insert(SQLQuery.from(query, args), User.class)
-            .doOnError(throwable -> log.error("Cannot insert '{}' due to exception: ", userId, throwable));
+        return rdbcAdapter.insert(SQLQuery.from(query, args))
+            .doOnError(throwable -> log.error("Cannot insert '{}' due to exception: ", userId, throwable))
+            .filter(inserted -> inserted)
+            .flatMap(inserted -> findUserByUserid(userId));
     }
 
     @Override
@@ -56,17 +58,24 @@ public class UserRepositoryImpl implements UserRepository {
         String query = "update public.user set name = $2, keywords = $3 where id = $1";
         String[] args = new String[] { userId, userDto.getName(), userDto.keywordsAsString() };
 
-        return rdbcAdapter.update(SQLQuery.from(query, args), User.class)
-            .doOnError(throwable -> log.error("Cannot update '{}' due to exception: ", userId, throwable));
+        return rdbcAdapter.update(SQLQuery.from(query, args))
+            .doOnError(throwable -> log.error("Cannot update '{}' due to exception: ", userId, throwable))
+            .filter(updated -> updated)
+            .flatMap(updated -> findUserByUserid(userId));
     }
 
     @Override
     public Mono<User> deleteByUserId(String userId) {
-        String query = "delete from public.user where id = $1";
-        String[] args = new String[] { userId };
+        return findUserByUserid(userId)
+            .flatMap(user -> {
+                String query = "delete from public.user where id = $1";
+                String[] args = new String[] { userId };
+                return rdbcAdapter.delete(SQLQuery.from(query, args))
+                    .doOnError(throwable -> log.error("Cannot delete '{}' due to exception: ", userId, throwable))
+                    .filter(deleted -> deleted)
+                    .map(deleted -> user);
+            });
 
-        return rdbcAdapter.delete(SQLQuery.from(query, args), User.class)
-            .doOnError(throwable -> log.error("Cannot delete '{}' due to exception: ", userId, throwable));
     }
 
 }

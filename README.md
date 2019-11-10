@@ -4,10 +4,14 @@ The `LocationApp` is able to trace a users location over time. The path of a use
 # How to run
 (TODO): 
 
-# How to build 
- (TODO):
- 
- (TODO): code cleanup + refactor postgresqlconnection's to connections + DAO layer
+# How to build
+(TODO): 
+ - Test path controller manually
+ - Integration tests
+ - Code cleanup
+ - Integrate with frontend
+ - Cloud deploy
+ - Writing documentation (README.md + Youtube video)
  
 
 # Impression
@@ -28,27 +32,33 @@ The `LocationApp` is able to trace a users location over time. The path of a use
 # Rest API
 
 ## Users
-GET:
+### GET:
 - `/api/users/` -> Fetches all users
 - `/api/users/:userId` -> Fetches user info for user with id `:userId`
 
-POST:
+### POST:
 - `/api/users/` -> Creates user
 
-PUT:
+Example:
+`curl -v -H 'Content-Type: application/json' -X POST --data '{ "name": "Darth Sidious", "keywords": ["Emperor", "Palpatine"] }' localhost:9000/api/users`
+
+### PUT:
 - `/api/users/` -> Updates user
 
-DELETE:
+Example:
+`{"id":"a9815fcf-bb65-4643-ba9f-c281e1cd6b72","name":"Darth Sidious","keyWords":["Emperor"," Palpatine"," Master"]}` 
+
+### DELETE:
 - `/api/users/:userId` -> Deletes user
 
 ## Paths
 
-GET:
+### GET:
 - `/api/paths/:pathId` -> Fetches path with `:pathId`
 - `/api/paths?userId=userId&startTime=XXX&endTime=YYY&pageSize=A&pageNumber=B` 
     -> Fetches paths belonging to `:userId` between moments in time XXX and YYY
 
-POST:
+### POST:
 - `/api/paths/users/:userId` -> Create a new path for a user
 
 # Data entities

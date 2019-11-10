@@ -3,6 +3,7 @@ package nl.lucien.configuration;
 
 import io.r2dbc.spi.*;
 import lombok.extern.slf4j.Slf4j;
+import nl.lucien.domain.Location;
 import nl.lucien.domain.Path;
 import nl.lucien.domain.PathMetaData;
 import nl.lucien.domain.User;
@@ -13,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.lang.reflect.Method;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,18 +48,18 @@ public class RdbcAdapterImpl implements RdbcAdapter {
     }
 
     @Override
-    public <T> Mono<T> insert(SQLQuery sqlQuery, Class<T> klass) {
-        return executeWriteQuery(sqlQuery, klass);
+    public Mono<Boolean> insert(SQLQuery insertQuery) {
+        return executeWriteQuery(insertQuery);
     }
 
     @Override
-    public <T> Mono<T> update(SQLQuery sqlQuery, Class<T> klass) {
-        return executeWriteQuery(sqlQuery, klass);
+    public Mono<Boolean> update(SQLQuery sqlQuery) {
+        return executeWriteQuery(sqlQuery);
     }
 
     @Override
-    public <T> Mono<T> delete(SQLQuery sqlQuery, Class<T> klass) {
-        return executeWriteQuery(sqlQuery, klass);
+    public Mono<Boolean> delete(SQLQuery sqlQuery) {
+        return executeWriteQuery(sqlQuery);
     }
 
     private void databaseEntityScan() throws NoSuchMethodException {
@@ -65,12 +67,14 @@ public class RdbcAdapterImpl implements RdbcAdapter {
         map = new HashMap<>();
         map.put(User.class, User.class.getDeclaredMethod("from", Row.class));
         map.put(PathMetaData.class, PathMetaData.class.getDeclaredMethod("from", Row.class));
+        map.put(Location.class, Location.class.getDeclaredMethod("from", Row.class));
     }
 
-    private <T> Mono<T> executeWriteQuery(SQLQuery sqlQuery, Class<T> klass) {
+    private Mono<Boolean> executeWriteQuery(SQLQuery sqlQuery) {
         return runSQLQuery(sqlQuery)
             .next()
-            .flatMap(row -> Mono.from(createEntityFrom(klass, row)));
+            .flatMap(row -> Mono.from(row.getRowsUpdated()))
+            .map(rowsUpdated -> rowsUpdated == 1);
     }
 
     private Mono<Connection> createConnection() {
@@ -85,26 +89,23 @@ public class RdbcAdapterImpl implements RdbcAdapter {
 
         return flux.doOnError(throwable -> log.info("SQL query execution error: query='{}'; error=",
             sqlQuery.getSqlExpression(), throwable))
-            .doOnComplete(() -> log.info("SQL query was successfully executed: '{}'", sqlQuery.getSqlExpression()));
+            .doOnComplete(() -> log.info("SQL query was successfully executed: '{}'", sqlQuery.getSqlExpression()))
+            .timeout(Duration.ofSeconds(1));
     }
 
     private Statement prepareStatement(Connection connection, SQLQuery sqlQuery) {
         Statement statement = connection.createStatement(sqlQuery.getSqlExpression());
 
-        for (Map.Entry<String, String> entry : sqlQuery.getParameters().entrySet()) {
+        for (Map.Entry<String, Object> entry : sqlQuery.getParameters().entrySet()) {
             statement.bind(entry.getKey(), entry.getValue());
         }
 
         return statement;
     }
 
-    private Mono<Integer> insertOrUpdateSucceeded(Result result) {
-        return Mono.from(result.getRowsUpdated())
-            .filter(rowsUpdated -> rowsUpdated == 1);
-    }
-
     private <T> Flux<T> createEntityFrom(Class<T> klass, Result result) {
-        return Flux.from(result.map((row, rowMetaData) -> convertDBEntity(klass, row)))
+        return Flux.from(result.map((row, rowMetaData) ->
+                convertDBEntity(klass, row)))
             .flatMap(mono -> mono);
     }
 

@@ -1,16 +1,17 @@
 package nl.lucien.domain;
 
-import io.r2dbc.postgresql.PostgresqlConnection;
-import io.r2dbc.postgresql.PostgresqlConnectionFactory;
-import io.r2dbc.postgresql.PostgresqlStatement;
 import io.r2dbc.spi.Row;
 import lombok.extern.slf4j.Slf4j;
+import nl.lucien.adapter.LocationDto;
 import nl.lucien.adapter.PathQuery;
+import nl.lucien.configuration.RdbcAdapter;
+import nl.lucien.configuration.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -33,109 +34,91 @@ public class PathRepositoryImpl implements PathRepository {
         "where p.userid = $1\n" +
         "group by p.id, p.userid";
 
-    private static final String FIND_PATH_BY_ID = "select longitude, latitude, \"timestamp\"\n" +
+    private static final String FIND_LOCATIONS_BY_PATHID = "select longitude, latitude, \"timestamp\"\n" +
         "from public.\"location\" \n" +
-        "where pathid = $1\n" +
+        "where pathid = $1 %s\n" +
         "order by \"timestamp\"";
 
-    private static final String QUERY_LOCATIONS = "select longitude, latitude, \"timestamp\"\n" +
-        "from public.\"location\" \n" +
-        "where pathid = $1\n" +
-        "%s \n" +
-        "order by \"timestamp\"";
+    private static final String CREATE_NEW_PATH = "insert into public.path values ($1, $2)";
+    private static final String CREATE_NEW_LOCATION = "insert into public.location values ($1, $2, $3, $4)";
 
-    // TODO: replace with interface instead of implementation
-    private PostgresqlConnectionFactory connectionFactory;
+    private RdbcAdapter rdbcAdapter;
 
     @Autowired
-    public PathRepositoryImpl(PostgresqlConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
+    public PathRepositoryImpl(RdbcAdapter rdbcAdapter) {
+        this.rdbcAdapter = rdbcAdapter;
     }
 
     @Override
     public Flux<Path> queryPaths(PathQuery pathQuery) {
-        return findAllPathMetaDataOfUserWith(pathQuery.getUserId())
-            .flatMap(pathMetaData -> queryLocationsBy(pathMetaData.getId(), pathQuery)
-                .flatMap(locations -> buildPathFrom(locations, pathMetaData.getId()))
-            );
+        return rdbcAdapter.findAll(SQLQuery.from(FIND_PATH_METADATA_BY_USERID, pathQuery.getUserId()), PathMetaData.class)
+            .flatMap(pathMetaData -> buildPath(pathMetaData, pathQuery));
     }
 
     @Override
     public Mono<Path> findById(String pathId) {
-        return queryLocationsBy(pathId, null)
-            .flatMap(locations -> buildPathFrom(locations, pathId))
-            .doOnError(throwable -> log.error("Could not find path with id '{}' due to: ", pathId, throwable));
+        return rdbcAdapter.find(SQLQuery.from(FIND_PATH_METADATA_BY_PATHID, pathId), PathMetaData.class)
+            .flatMap(pathMetaData -> buildPath(pathMetaData, null));
     }
 
     @Override
     public Mono<Path> createPathFor(String userId) {
         String pathId = UUID.randomUUID().toString();
-        return connectionFactory.create().flatMapMany(connetion ->
-            connetion.createStatement("insert into public.path values ($1, $2)")
-                .bind("$1", pathId)
-                .bind("$2", userId)
-                .execute()
-        )
-        .doOnError(throwable -> log.error("Could not construct path for user'{}' due to: ", userId, throwable))
-        .next()
-        .flatMap(result -> result.getRowsUpdated()
-            .map(noOfRowsUpdated -> noOfRowsUpdated == 1)
-        ).flatMap(created -> {
-            Mono<Path> monoPath;
-            if (created) {
-                monoPath = findPathMetaDataByPathId(pathId)
-                    .map(pathMetaData -> Path.from(pathMetaData, Arrays.asList()));
-            } else {
-                monoPath = Mono.empty();
-            }
-
-            return monoPath;
-        });
+        return rdbcAdapter.insert(SQLQuery.from(CREATE_NEW_PATH, pathId, userId))
+            .filter(inserted -> inserted)
+            .flatMap(inserted -> findPathMetaDataByPathId(pathId)
+                .map(pathMetaData -> Path.from(pathMetaData, Arrays.asList()))
+            );
     }
 
-    private Flux<PathMetaData> findAllPathMetaDataOfUserWith(String userId) {
-        return connectionFactory.create().flatMapMany(connection ->
-            connection.createStatement(FIND_PATH_METADATA_BY_USERID)
-                .bind("$1", userId)
-                .execute()
-        )
-        .flatMap(result -> result.map((row, rowMetaData) -> PathMetaData.from(row)));
+    @Override
+    public Mono<Path> addLocationToPath(String pathId, LocationDto locationDto) {
+        return findPathMetaDataByPathId(pathId)
+            .flatMap(pathMetaData -> {
+                SQLQuery sqlQuery = SQLQuery.from(CREATE_NEW_LOCATION, pathId,
+                    locationDto.getLongitude(), locationDto.getLatitude(), locationDto.getTimestamp());
+                return rdbcAdapter.insert(sqlQuery)
+                    .filter(inserted -> inserted)
+                    .flatMap(inserted -> buildPath(pathMetaData, null));
+            });
     }
 
-    private Mono<List<Location>> queryLocationsBy(String pathId, PathQuery pathQuery) {
-        return connectionFactory.create().flatMapMany(connection ->
-            buildStatement(connection, pathId, pathQuery)
-            .execute()
-        )
-        .flatMap(result -> result.map((row, rowMetaData) -> locationFromRow(row)))
-        .collectList();
+    private Mono<Path> buildPath(PathMetaData pathMetaData, PathQuery pathQuery) {
+        return findLocationsByPathId(pathMetaData.getId(), pathQuery)
+            .collectList()
+            .map(locations -> Path.from(pathMetaData, locations));
     }
 
-    private PostgresqlStatement buildStatement(PostgresqlConnection connection, String pathId, PathQuery pathQuery) {
-        PostgresqlStatement statement;
+    private Mono<PathMetaData> findPathMetaDataByPathId(String pathId) {
+        return rdbcAdapter.find(SQLQuery.from(FIND_PATH_METADATA_BY_PATHID, pathId), PathMetaData.class);
+    }
 
-        if (pathQuery == null) {
-            statement = connection.createStatement(FIND_PATH_BY_ID)
-                .bind("$1", pathId);
-        } else {
-            statement = connection.createStatement(buildQueryLocationSqlQuery(pathQuery))
-                .bind("$1", pathId);
+    private Flux<Location> findLocationsByPathId(String pathId, PathQuery pathQuery) {
+        return rdbcAdapter.findAll(buildLocationsQuery(pathId, pathQuery), Location.class);
+    }
 
+    private SQLQuery buildLocationsQuery(String pathId, PathQuery pathQuery) {
+
+        List<Object> args = new ArrayList<>();
+        args.add(pathId);
+
+        String queryString = buildQueryLocationSqlQuery(pathQuery);
+        if (pathQuery != null) {
             if (pathQuery.getStartTime() != null) {
-                statement = statement.bind("$2", pathQuery.getStartTime());
+                args.add(pathQuery.getStartTime());
             }
 
             if (pathQuery.getEndTime() != null) {
-                String identifier = (pathQuery.getStartTime() == null) ? "$2" : "$3";
-                statement = statement.bind(identifier, pathQuery.getEndTime());
+                args.add(pathQuery.getEndTime());
             }
         }
 
-        return statement;
+        SQLQuery sqlQuery = SQLQuery.from(queryString, args);
+        return sqlQuery;
     }
 
     private String buildQueryLocationSqlQuery(PathQuery pathQuery) {
-        String sqlBlock = "";
+        String sqlBlock = FIND_LOCATIONS_BY_PATHID;
 
         if (pathQuery.getStartTime() != null) {
             sqlBlock += " and \"timestamp\" >= $2 ";
@@ -146,37 +129,10 @@ public class PathRepositoryImpl implements PathRepository {
             sqlBlock += " and \"timestamp\" <= " + identifier + " ";
         }
 
-        String query = format(QUERY_LOCATIONS, sqlBlock);
+        String query = format(sqlBlock, sqlBlock);
         return query;
     }
 
-    private Location locationFromRow(Row row) {
-        Double longitude = row.get("longitude", Double.class);
-        Double latitude = row.get("latitude", Double.class);
-        Long unixTimestamp = row.get("timestamp", Long.class);
 
-        Location location = Location.builder()
-                .latitude(latitude)
-                .longitude(longitude)
-                .timestamp(unixTimestamp)
-                .build();
-
-        return location;
-    }
-
-    private Mono<Path> buildPathFrom(List<Location> locations, String pathId) {
-        return findPathMetaDataByPathId(pathId)
-            .map(pathMetaData -> Path.from(pathMetaData, locations));
-    }
-
-    private Mono<PathMetaData> findPathMetaDataByPathId(String pathId) {
-        return connectionFactory.create().flatMapMany(connection ->
-            connection.createStatement(FIND_PATH_METADATA_BY_PATHID)
-                .bind("$1", pathId)
-                .execute()
-        )
-        .next()
-        .flatMap(result -> result.map((row, rowMetaData) -> PathMetaData.from(row)).next());
-    }
 
 }
