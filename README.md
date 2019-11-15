@@ -1,21 +1,16 @@
 # LocationApp
 The `LocationApp` is able to trace a users location over time. The path of a user is diplayable on a (Google) map in your browser.
 
-# How to run
-(TODO): 
-
 # How to build
-(TODO): 
- - Test path controller manually
- - Integration tests
- - Code cleanup
- - Integrate with frontend
- - Cloud deploy
- - Writing documentation (README.md + Youtube video)
- 
+Copy the file `src/main/liquibase/liquibase.properties.example` to `src/main/liquibase/liquibase.properties`. Either set
+the environment variables or set the values in the file.
 
-# Impression
-(TODO): _
+Then run:
+
+`mvn clean install` 
+
+# How to run
+`mvn spring-boot:run`
 
 # Technologies:
 - React
@@ -27,7 +22,6 @@ The `LocationApp` is able to trace a users location over time. The path of a use
 
 # Structure
 `location-ui` contains the React-based frontend. `location-server` contains the backend code.
-
 
 # Rest API
 
@@ -61,6 +55,9 @@ Example:
 ### POST:
 - `/api/paths/users/:userId` -> Create a new path for a user
 
+Example:
+`curl -i -X POST -H "Content-Type: application/json" localhost:9000/api/paths/users/88d0095d-5240-41ee-96e9-f6827963776c`
+
 # Data entities
 
 `User`:
@@ -72,7 +69,6 @@ Example:
 	"keywords": [ "Azor Ahai", "Lord Commander"]
 }
 ```
-
 
 `GeoLocationResponse`:
  

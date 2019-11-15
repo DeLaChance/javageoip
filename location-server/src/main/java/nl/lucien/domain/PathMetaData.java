@@ -10,7 +10,7 @@ import lombok.Data;
  * Holds all non-geografic data about a {@link Path}.
  */
 @JsonDeserialize(builder = PathMetaData.Builder.class)
-@Builder
+@Builder(builderClassName = "Builder")
 @Data
 public class PathMetaData {
 
@@ -21,7 +21,9 @@ public class PathMetaData {
     public static PathMetaData from(Row row) {
         String id = row.get("id", String.class);
         String userId = row.get("userid", String.class);
-        Integer length = row.get("length", Integer.class);
+
+        Object lengthObject = row.get("length");
+        Integer length = (lengthObject == null) ? 0 : Integer.parseInt(String.valueOf(lengthObject));
 
         return PathMetaData.builder()
             .id(id)

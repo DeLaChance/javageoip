@@ -7,7 +7,7 @@ import lombok.Data;
 import nl.lucien.domain.Location;
 
 @JsonDeserialize(builder = LocationDto.Builder.class)
-@Builder
+@Builder(builderClassName = "Builder")
 @Data
 public class LocationDto {
 

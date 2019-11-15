@@ -62,14 +62,14 @@ public class PathController {
         return monoResponseEntity;
     }
 
-    @PostMapping("users/{userId}")
+    @PostMapping("/users/{userId}")
     public Mono<ResponseEntity<Path>> createPath(@PathVariable String userId) {
         return pathRepository.createPathFor(userId)
-            .map(path -> new ResponseEntity<>(path, HttpStatus.OK))
+            .map(path -> new ResponseEntity<>(path, HttpStatus.CREATED))
             .onErrorReturn(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
-    @PostMapping("{pathId}")
+    @PostMapping("/{pathId}")
     public Mono<ResponseEntity<Path>> addLocationToPath(@PathVariable String pathId, @RequestBody LocationDto locationDto) {
         return pathRepository.addLocationToPath(pathId, locationDto)
             .map(path -> new ResponseEntity<>(path, HttpStatus.OK))

@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
 import static org.hamcrest.core.Is.is;
@@ -39,7 +40,7 @@ public class UserControllerIT extends BaseIntegrationTest {
     }
 
     @After
-    public void afterEachTest() {
+    public void afterEachTest() throws InterruptedException {
         clearUserRepository();
     }
 
@@ -65,7 +66,7 @@ public class UserControllerIT extends BaseIntegrationTest {
         UserDto user = TestUtils.newUser();
 
         // When
-        HttpResponse<String> response = peformPostCall(user, url);
+        HttpResponse<String> response = performPostCall(user, url);
 
         // Then
         assertTrue(response.statusCode() == HttpStatus.CREATED.value());
@@ -78,7 +79,7 @@ public class UserControllerIT extends BaseIntegrationTest {
         String url = generateUserControllerUrl() + "/" + existingUser.getId();
 
         // When
-        HttpResponse<String> response = peformPutCall(existingUser, url);
+        HttpResponse<String> response = performPutCall(existingUser, url);
 
         // Then
         assertTrue(response.statusCode() == HttpStatus.OK.value());
@@ -94,7 +95,7 @@ public class UserControllerIT extends BaseIntegrationTest {
         String url = generateUserControllerUrl() + "/" + existingUser.getId();
 
         // When
-        HttpResponse<String> response = peformDeleteCall(url);
+        HttpResponse<String> response = performDeleteCall(url);
 
         // Then
         assertTrue(response.statusCode() == HttpStatus.OK.value());

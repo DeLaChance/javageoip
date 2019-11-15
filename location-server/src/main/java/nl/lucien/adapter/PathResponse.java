@@ -11,13 +11,12 @@ import nl.lucien.domain.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@JsonDeserialize(builder = PathResponse.Builder.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Builder
+@JsonDeserialize(builder = PathResponse.Builder.class)
+@Builder(builderClassName = "Builder")
 @Data
 public class PathResponse {
 
-    @JsonUnwrapped
     private final PathMetadataDto pathMetadata;
     private final Long startTime;
     private final Long endTime;

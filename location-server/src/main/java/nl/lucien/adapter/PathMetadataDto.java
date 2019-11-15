@@ -7,9 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import nl.lucien.domain.PathMetaData;
 
-@JsonDeserialize(builder = PathMetadataDto.Builder.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Builder
+@JsonDeserialize(builder = PathMetadataDto.Builder.class)
+@Builder(builderClassName = "Builder")
 @Data
 public class PathMetadataDto {
 

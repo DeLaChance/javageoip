@@ -1,6 +1,8 @@
 package nl.lucien;
 
+import nl.lucien.adapter.LocationDto;
 import nl.lucien.adapter.UserDto;
+import nl.lucien.domain.Location;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,5 +27,9 @@ public class TestUtils {
             .name("Varys")
             .keywords(Stream.of("Eunuch", "Spider").collect(Collectors.toList()))
             .build();
+    }
+
+    public static LocationDto newLocation() {
+        return LocationDto.from(Location.randomLocation());
     }
 }

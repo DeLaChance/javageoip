@@ -36,15 +36,15 @@ public abstract class BaseIntegrationTest {
         return httpCall(GET, url);
     }
 
-    public HttpResponse<String> peformPostCall(Object entity, String url) {
+    public HttpResponse<String> performPostCall(Object entity, String url) {
         return httpCall(HttpMethod.POST, entity, url);
     }
 
-    public HttpResponse<String> peformPutCall(Object entity, String url) {
+    public HttpResponse<String> performPutCall(Object entity, String url) {
         return httpCall(PUT, entity, url);
     }
 
-    public HttpResponse<String> peformDeleteCall(String url) {
+    public HttpResponse<String> performDeleteCall(String url) {
         return httpCall(DELETE, url);
     }
 
@@ -85,7 +85,7 @@ public abstract class BaseIntegrationTest {
         HttpRequest.Builder httpRequestBuilder = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON)
-                .timeout(Duration.ofSeconds(2));
+                .timeout(Duration.ofSeconds(30));
 
         if (method == GET) {
             httpRequestBuilder = httpRequestBuilder.GET();

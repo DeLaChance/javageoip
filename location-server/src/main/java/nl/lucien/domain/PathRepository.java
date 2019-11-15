@@ -7,8 +7,10 @@ import reactor.core.publisher.Mono;
 
 public interface PathRepository {
 
+    Flux<Path> findAll();
     Mono<Path> findById(String pathId);
     Flux<Path> queryPaths(PathQuery pathQuery);
     Mono<Path> createPathFor(String userId);
     Mono<Path> addLocationToPath(String pathId, LocationDto locationDto);
+    Mono<Path> deleteByPathId(String pathId);
 }

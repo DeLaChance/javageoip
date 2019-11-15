@@ -27,14 +27,14 @@
             </column>
 
             <column name="userid" type="varchar(64)">
-                <constraints nullable="false" unique="true"/>
+                <constraints nullable="false" />
             </column>
 
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="userid" baseTableName="path" baseTableSchemaName="locationcloud"
              constraintName="fk_user_path_id" referencedTableSchemaName="locationcloud" referencedColumnNames="id"
-             referencedTableName="user"/>
+             referencedTableName="user" onDelete="CASCADE" onUpdate="RESTRICT"/>
 
     </changeSet>
 
@@ -46,7 +46,7 @@
             </column>
 
             <column name="pathid" type="varchar(64)">
-                <constraints nullable="false" unique="true"/>
+                <constraints nullable="false" />
             </column>
 
             <column name="timestamp" type="int">
@@ -65,7 +65,7 @@
 
         <addForeignKeyConstraint baseColumnNames="pathid" baseTableName="location" baseTableSchemaName="locationcloud"
             referencedTableSchemaName="locationcloud" constraintName="fk_path_location_id" referencedColumnNames="id"
-            referencedTableName="path"/>
+            referencedTableName="path" onDelete="CASCADE" onUpdate="RESTRICT"/>
 
     </changeSet>
 

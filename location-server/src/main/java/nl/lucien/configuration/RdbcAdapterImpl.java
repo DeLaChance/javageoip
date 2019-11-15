@@ -76,18 +76,22 @@ public class RdbcAdapterImpl implements RdbcAdapter {
     }
 
     private Mono<Connection> createConnection() {
-        Mono<Connection> connectionMono = Mono.from(connectionFactory.create());;
+        Mono<Connection> connectionMono = Mono.from(connectionFactory.create());
         return connectionMono;
     }
 
     private Flux<Result> runSQLQuery(SQLQuery sqlQuery) {
+        log.info("Going to execute query: '{}'", sqlQuery);
+
         Flux<Result> flux = createConnection()
-            .map(connection -> prepareStatement(connection, sqlQuery))
-            .flatMapMany(statement -> statement.execute());
+            .flatMapMany(connection -> Mono.just(prepareStatement(connection, sqlQuery))
+                .flatMapMany(statement -> statement.execute())
+                .doFinally(aSignal -> connection.close())
+            );
 
         return flux.doOnError(throwable -> log.info("SQL query execution error: query='{}'; error=",
             sqlQuery.getSqlExpression(), throwable))
-            .doOnComplete(() -> log.info("SQL query was successfully executed: '{}'", sqlQuery.getSqlExpression()))
+            .doOnComplete(() -> log.info("SQL query was executed: '{}'", sqlQuery))
             .timeout(Duration.ofSeconds(2));
     }
 
@@ -98,7 +102,7 @@ public class RdbcAdapterImpl implements RdbcAdapter {
             statement.bind(entry.getKey(), entry.getValue());
         }
 
-        return statement;
+         return statement;
     }
 
     private <T> Flux<T> createEntityFrom(Class<T> klass, Result result) {
