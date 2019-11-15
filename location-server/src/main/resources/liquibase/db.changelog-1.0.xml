@@ -6,7 +6,7 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
     <changeSet author="lvalstar" id="create-user-table">
-        <createTable tableName="user" schemaName="location-cloud">
+        <createTable tableName="user" schemaName="locationcloud">
 
             <column name="id" type="varchar(64)">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -14,13 +14,13 @@
             <column name="name" type="varchar(64)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="keyWords" type="text" />
+            <column name="keywords" type="text" />
 
         </createTable>
     </changeSet>
 
     <changeSet author="lvalstar" id="create-path-table">
-        <createTable tableName="path" schemaName="location-cloud">
+        <createTable tableName="path" schemaName="locationcloud">
 
             <column name="id" type="varchar(64)">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -32,14 +32,14 @@
 
         </createTable>
 
-        <addForeignKeyConstraint baseColumnNames="userid" baseTableName="path" baseTableSchemaName="location-cloud"
-             constraintName="fk_user_path_id" referencedTableSchemaName="location-cloud" referencedColumnNames="id"
+        <addForeignKeyConstraint baseColumnNames="userid" baseTableName="path" baseTableSchemaName="locationcloud"
+             constraintName="fk_user_path_id" referencedTableSchemaName="locationcloud" referencedColumnNames="id"
              referencedTableName="user"/>
 
     </changeSet>
 
     <changeSet author="lvalstar" id="create-location-table">
-        <createTable tableName="location" schemaName="location-cloud">
+        <createTable tableName="location" schemaName="locationcloud">
 
             <column name="id" type="varchar(64)">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -63,8 +63,8 @@
 
         </createTable>
 
-        <addForeignKeyConstraint baseColumnNames="pathid" baseTableName="location" baseTableSchemaName="location-cloud"
-            referencedTableSchemaName="location-cloud" constraintName="fk_path_location_id" referencedColumnNames="id"
+        <addForeignKeyConstraint baseColumnNames="pathid" baseTableName="location" baseTableSchemaName="locationcloud"
+            referencedTableSchemaName="locationcloud" constraintName="fk_path_location_id" referencedColumnNames="id"
             referencedTableName="path"/>
 
     </changeSet>

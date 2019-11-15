@@ -23,24 +23,24 @@ import static java.lang.String.format;
 public class PathRepositoryImpl implements PathRepository {
 
     private static final String FIND_PATH_METADATA_BY_PATHID = "select p.id, p.userid, count(*) as length\n" +
-        "from public.\"path\" as p\n" +
-        "inner join public.\"location\" as l on l.pathid = p.id\n" +
+        "from locationcloud.\"path\" as p\n" +
+        "inner join locationcloud.\"location\" as l on l.pathid = p.id\n" +
         "where p.id = $1\n" +
         "group by p.id, p.userid";
 
     private static final String FIND_PATH_METADATA_BY_USERID = "select p.id, p.userid, count(*) as length\n" +
-        "from public.\"path\" as p\n" +
-        "inner join public.\"location\" as l on l.pathid = p.id\n" +
+        "from locationcloud.\"path\" as p\n" +
+        "inner join locationcloud.\"location\" as l on l.pathid = p.id\n" +
         "where p.userid = $1\n" +
         "group by p.id, p.userid";
 
     private static final String FIND_LOCATIONS_BY_PATHID = "select longitude, latitude, \"timestamp\"\n" +
-        "from public.\"location\" \n" +
+        "from locationcloud.\"location\" \n" +
         "where pathid = $1 %s\n" +
         "order by \"timestamp\"";
 
-    private static final String CREATE_NEW_PATH = "insert into public.path values ($1, $2)";
-    private static final String CREATE_NEW_LOCATION = "insert into public.location values ($1, $2, $3, $4)";
+    private static final String CREATE_NEW_PATH = "insert into locationcloud.path values ($1, $2)";
+    private static final String CREATE_NEW_LOCATION = "insert into locationcloud.location values ($1, $2, $3, $4)";
 
     private RdbcAdapter rdbcAdapter;
 

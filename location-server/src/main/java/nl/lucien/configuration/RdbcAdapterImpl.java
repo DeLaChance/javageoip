@@ -88,7 +88,7 @@ public class RdbcAdapterImpl implements RdbcAdapter {
         return flux.doOnError(throwable -> log.info("SQL query execution error: query='{}'; error=",
             sqlQuery.getSqlExpression(), throwable))
             .doOnComplete(() -> log.info("SQL query was successfully executed: '{}'", sqlQuery.getSqlExpression()))
-            .timeout(Duration.ofSeconds(1));
+            .timeout(Duration.ofSeconds(2));
     }
 
     private Statement prepareStatement(Connection connection, SQLQuery sqlQuery) {

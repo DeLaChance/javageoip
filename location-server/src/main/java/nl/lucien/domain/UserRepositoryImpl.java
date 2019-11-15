@@ -24,13 +24,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Flux<User> findAll() {
-        String sqlQuery = "select id, name, keywords from public.user";
+        String sqlQuery = "select id, name, keywords from locationcloud.user";
         return rdbcAdapter.findAll(SQLQuery.from(sqlQuery, new String[]{}), User.class);
     }
 
     @Override
     public Mono<User> findUserByUserid(String userId) {
-        String query = "select id, name, keywords from public.user where id = $1";
+        String query = "select id, name, keywords from locationcloud.user where id = $1";
         String[] args = new String[] { userId };
 
         return rdbcAdapter.find(SQLQuery.from(query, args), User.class);
@@ -42,7 +42,7 @@ public class UserRepositoryImpl implements UserRepository {
         String userId = (userDto.getId() == null) ? UUID.randomUUID().toString() : userDto.getId();
         userDto.setId(userId);
 
-        String query = "insert into public.user values ($1, $2, $3)";
+        String query = "insert into locationcloud.user values ($1, $2, $3)";
         String[] args = new String[] { userId, userDto.getName(), userDto.keywordsAsString() };
 
         return rdbcAdapter.insert(SQLQuery.from(query, args))
@@ -55,7 +55,7 @@ public class UserRepositoryImpl implements UserRepository {
     public Mono<User> update(String userId, UserDto userDto) {
         userDto.setId(userId);
 
-        String query = "update public.user set name = $2, keywords = $3 where id = $1";
+        String query = "update locationcloud.user set name = $2, keywords = $3 where id = $1";
         String[] args = new String[] { userId, userDto.getName(), userDto.keywordsAsString() };
 
         return rdbcAdapter.update(SQLQuery.from(query, args))
@@ -68,7 +68,7 @@ public class UserRepositoryImpl implements UserRepository {
     public Mono<User> deleteByUserId(String userId) {
         return findUserByUserid(userId)
             .flatMap(user -> {
-                String query = "delete from public.user where id = $1";
+                String query = "delete from locationcloud.user where id = $1";
                 String[] args = new String[] { userId };
                 return rdbcAdapter.delete(SQLQuery.from(query, args))
                     .doOnError(throwable -> log.error("Cannot delete '{}' due to exception: ", userId, throwable))

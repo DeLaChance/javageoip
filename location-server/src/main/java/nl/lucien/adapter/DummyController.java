@@ -20,13 +20,13 @@ public class DummyController {
     private static User JOHN_SNOW = User.builder()
         .id(UUID.randomUUID().toString())
         .name("John Snow")
-        .keyWords(Arrays.asList("Lord Commander", "Azor Ahai"))
+        .keywords(Arrays.asList("Lord Commander", "Azor Ahai"))
         .build();
 
     private static User TYRION_LANNISTER = User.builder()
         .id(UUID.randomUUID().toString())
         .name("Tyrion Lannister")
-        .keyWords(Arrays.asList("Imp", "Halfman"))
+        .keywords(Arrays.asList("Imp", "Halfman"))
         .build();
 
     private static Location EINDHOVEN_LOCATION = Location.builder()

@@ -22,13 +22,13 @@ public class User {
 
     private String id;
     private String name;
-    private List<String> keyWords;
+    private List<String> keywords;
 
     public static User from(UserDto userInput) {
         return User.builder()
             .id(userInput.getId())
             .name(userInput.getName())
-            .keyWords(userInput.getKeywords())
+            .keywords(userInput.getKeywords())
             .build();
     }
 
@@ -48,7 +48,7 @@ public class User {
         return User.builder()
             .id(row.get("id", String.class))
             .name(row.get("name", String.class))
-            .keyWords(keyWords)
+            .keywords(keyWords)
             .build();
     }
 
