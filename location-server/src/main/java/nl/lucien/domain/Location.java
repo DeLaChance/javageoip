@@ -31,31 +31,6 @@ public class Location {
     private Double latitude;
     private Long timestamp; // unix timestamp (seconds since epoch)
 
-    public static Location from(Row row) {
-        Double longitude = fetchAttributeFromRow("longitude", row)
-            .map(Double::parseDouble).orElse(null);
-        Double latitude = fetchAttributeFromRow("latitude", row)
-            .map(Double::parseDouble).orElse(null);
-        Long unixTimestamp = fetchAttributeFromRow("timestamp", row)
-            .map(Long::parseLong)
-            .orElse(null);
-
-        Location location = Location.builder()
-                .latitude(latitude)
-                .longitude(longitude)
-                .timestamp(unixTimestamp)
-                .build();
-
-        return location;
-    }
-
-    private static Optional<String> fetchAttributeFromRow(String attribute, Row row) {
-        Object object = row.get(attribute);
-        return Optional.ofNullable(object)
-            .map(String::valueOf)
-            .filter(Predicate.not(String::isEmpty));
-    }
-
     public static Location randomLocation() {
         Random random = new Random();
         double latitude = (random.nextDouble() % MAX_LATITUDE) - MAX_LATITUDE;
@@ -69,6 +44,31 @@ public class Location {
             .build();
 
         return randomLocation;
+    }
+
+    public static Location from(Row row) {
+        Double longitude = fetchAttributeFromRow("longitude", row)
+                .map(Double::parseDouble).orElse(null);
+        Double latitude = fetchAttributeFromRow("latitude", row)
+                .map(Double::parseDouble).orElse(null);
+        Long unixTimestamp = fetchAttributeFromRow("timestamp", row)
+                .map(Long::parseLong)
+                .orElse(null);
+
+        Location location = Location.builder()
+            .latitude(latitude)
+            .longitude(longitude)
+            .timestamp(unixTimestamp)
+            .build();
+
+        return location;
+    }
+
+    private static Optional<String> fetchAttributeFromRow(String attribute, Row row) {
+        Object object = row.get(attribute);
+        return Optional.ofNullable(object)
+            .map(String::valueOf)
+            .filter(Predicate.not(String::isEmpty));
     }
 
     @JsonPOJOBuilder(withPrefix = "")

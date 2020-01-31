@@ -1,9 +1,11 @@
-package nl.lucien.domain;
+package nl.lucien.domain.repository.postgres;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.lucien.adapter.UserDto;
-import nl.lucien.configuration.RdbcAdapter;
-import nl.lucien.configuration.SQLQuery;
+import nl.lucien.configuration.postgresql.RdbcAdapter;
+import nl.lucien.configuration.postgresql.SQLQuery;
+import nl.lucien.domain.User;
+import nl.lucien.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
@@ -13,12 +15,12 @@ import java.util.UUID;
 
 @Repository
 @Slf4j
-public class UserRepositoryImpl implements UserRepository {
+public class PostgresUserRepository implements UserRepository {
 
     private RdbcAdapter rdbcAdapter;
 
     @Autowired
-    public UserRepositoryImpl(RdbcAdapter rdbcAdapter) {
+    public PostgresUserRepository(RdbcAdapter rdbcAdapter) {
         this.rdbcAdapter = rdbcAdapter;
     }
 

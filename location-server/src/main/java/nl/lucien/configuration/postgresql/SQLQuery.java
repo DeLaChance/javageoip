@@ -1,4 +1,4 @@
-package nl.lucien.configuration;
+package nl.lucien.configuration.postgresql;
 
 import liquibase.util.StringUtils;
 import lombok.Getter;

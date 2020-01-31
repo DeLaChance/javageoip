@@ -1,4 +1,4 @@
-package nl.lucien.configuration;
+package nl.lucien.configuration.postgresql;
 
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Autowired;

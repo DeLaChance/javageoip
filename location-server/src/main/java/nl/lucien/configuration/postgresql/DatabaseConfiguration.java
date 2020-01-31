@@ -1,4 +1,4 @@
-package nl.lucien.configuration;
+package nl.lucien.configuration.postgresql;
 
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;

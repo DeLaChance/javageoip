@@ -1,10 +1,14 @@
-package nl.lucien.domain;
+package nl.lucien.domain.repository.postgres;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.lucien.adapter.LocationDto;
 import nl.lucien.adapter.PathQuery;
-import nl.lucien.configuration.RdbcAdapter;
-import nl.lucien.configuration.SQLQuery;
+import nl.lucien.configuration.postgresql.RdbcAdapter;
+import nl.lucien.configuration.postgresql.SQLQuery;
+import nl.lucien.domain.Location;
+import nl.lucien.domain.Path;
+import nl.lucien.domain.PathMetaData;
+import nl.lucien.domain.PathRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
@@ -16,7 +20,7 @@ import static java.lang.String.format;
 
 @Repository
 @Slf4j
-public class PathRepositoryImpl implements PathRepository {
+public class PostgresPathRepository implements PathRepository {
 
     private static final String FIND_ALL_PATH_METADATA = "select p.id, p.userid, count(*)-1 as length\n" +
         "from locationcloud.\"path\" as p\n" +
@@ -48,7 +52,7 @@ public class PathRepositoryImpl implements PathRepository {
     private RdbcAdapter rdbcAdapter;
 
     @Autowired
-    public PathRepositoryImpl(RdbcAdapter rdbcAdapter) {
+    public PostgresPathRepository(RdbcAdapter rdbcAdapter) {
         this.rdbcAdapter = rdbcAdapter;
     }
 
