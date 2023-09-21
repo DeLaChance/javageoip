@@ -5,7 +5,8 @@ import lombok.Data;
 
 @Data 
 @Builder
-public class GeoIp {
+public class Country {
 
-    private String ipAddress;    
+    private String code;    
+    private String name;
 }
