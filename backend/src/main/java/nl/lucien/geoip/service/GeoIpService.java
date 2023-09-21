@@ -20,7 +20,7 @@ public class GeoIpService {
         this.repository = repository;
     }
 
-    public Mono<GeoIpResponse> findCountryByIpAddress(String ipAddress) {
+   public Mono<GeoIpResponse> findCountryByIpAddress(String ipAddress) {
         IPv4Address iPv4Address = new IPAddressString(ipAddress).getAddress().toIPv4();        
         Mono<Country> monoCountry = repository.findCountryByIpAddressOrError(iPv4Address.longValue());
         return monoCountry.map(country -> GeoIpResponse.from(country, iPv4Address));

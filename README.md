@@ -16,3 +16,11 @@ GET [http://localhost:8080/api/geoip/8.8.8.8/country](http://localhost:8080/api/
   }
 }
 ```
+
+## Commands
+
+To start minikube:
+`minikube start --driver=none --addons=ingress --cni=flannel --install-addons=true --kubernetes-version=v1.23`
+
+To get access to DB:
+`minikube service postgresdb-service`

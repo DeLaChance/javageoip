@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresdb
+spec:
+  selector:
+    matchLabels:
+      app: postgresdb
+  template:
+    metadata:
+      labels:
+        app: postgresdb
+    spec:
+      containers:
+        - name: postgresdb
+          image: luciendelachance/geoipdb:1
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config 
+                  key: user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: password
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: postgresdb-pvc
