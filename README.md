@@ -19,6 +19,18 @@ GET [http://localhost:8080/api/geoip/8.8.8.8/country](http://localhost:8080/api/
 
 ## Commands
 
+## Build
+To build docker image for DB:
+```
+VERSION=`X`
+sudo docker build -t geoipdb:${VERSION} .
+
+image=$(docker image ls | egrep '^geoipdb' | awk '{ print $3 }')
+docker tag $image luciendelachance/geoipdb:${VERSION}
+docker push luciendelachance/geoipdb:${VERSION}
+```
+
+## Cluster
 To start minikube:
 `minikube start --driver=none --addons=ingress --cni=flannel --install-addons=true --kubernetes-version=v1.23`
 
