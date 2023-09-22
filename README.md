@@ -22,7 +22,7 @@ GET [http://localhost:8080/api/geoip/8.8.8.8/country](http://localhost:8080/api/
 ## Build Docker 
 To build docker image for DB:
 ```
-VERSION=`0.0.1`
+VERSION=`1.0.1`
 cd javageoip/
 
 image=$(docker image ls | egrep '^javageoip' | head -n 1 | | awk '{ print $3 }')
