@@ -1,0 +1,17 @@
+server:
+  port: 8080
+  address: 0.0.0.0
+
+spring:
+  application:
+    name: javageoip
+  datasource:
+    database: geoip
+    host: ${POSTGRESQL_HOST}
+    port: ${POSTGRESQL_PORT}
+    driver-class-name: org.postgresql.Driver
+    username: ${POSTGRESQL_USER}
+    password: ${POSTGRESQL_PASSWORD}
+
+
+    

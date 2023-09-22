@@ -39,6 +39,6 @@ To get access to DB:
 
 
 ## TODO:
-- Unit tests with DB spun up 
 - Dockerize app itself 
+- Test if IT closes successfully after test failure
 - Helm charts

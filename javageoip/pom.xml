@@ -19,8 +19,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <java.version>21</java.version>
+        <java.version>20</java.version>
         <lombok.version>1.18.30</lombok.version>
+
+        <skip.integration.tests>false</skip.integration.tests>
     </properties>
 
     <dependencies>
@@ -77,8 +79,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <annotationProcessorPaths>
 
                         <path>
@@ -133,6 +135,7 @@
 
                 <configuration>
                     <useColor>true</useColor>
+                    <skip>${skip.integration.tests}</skip>
                     <images>
                         <image>
                             <name>luciendelachance/geoipdb:2</name>
