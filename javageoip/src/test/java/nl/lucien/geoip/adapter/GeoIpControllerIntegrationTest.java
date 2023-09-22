@@ -43,4 +43,18 @@ public class GeoIpControllerIntegrationTest {
         assertNotNull(payload.getQuery());
         assertEquals(ipAddress, payload.getQuery().getIpAddress());
     }    
+
+    @SneakyThrows
+    @DisplayName("Test that a non existing country can not be found by its IP address")
+    @Test
+    public void test_that_a_non_existing_country_can_not_be_found_by_address() {
+        // Given
+        String nonExistingIpAddress = "100.4.4.4";
+
+        // When
+        ResponseEntity<GeoIpResponse> response = restService.findCountryByIpAddress(nonExistingIpAddress);
+
+        // Then
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }  
 }

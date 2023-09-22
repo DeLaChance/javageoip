@@ -8,7 +8,6 @@ COPY .mvn .mvn
 COPY pom.xml .
 
 # RUN ./mvnw dependency:go-offline
-COPY ../../../.m2/ /root/.m2/
 
 COPY src src
 

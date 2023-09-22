@@ -40,5 +40,4 @@ To get access to DB:
 
 ## TODO:
 - Dockerize app itself 
-- Test if IT closes successfully after test failure
 - Helm charts
