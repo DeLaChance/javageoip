@@ -36,3 +36,9 @@ To start minikube:
 
 To get access to DB:
 `minikube service postgresdb-service`
+
+
+## TODO:
+- Unit tests with DB spun up 
+- Dockerize app itself 
+- Helm charts

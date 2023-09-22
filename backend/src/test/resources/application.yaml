@@ -1,0 +1,14 @@
+server:
+  port: 9000
+  address: 0.0.0.0
+
+spring:
+  application:
+    name: javageoip
+  datasource:
+    database: geoip
+    host: 172.17.33.48
+    port: 30007
+    driver-class-name: org.postgresql.Driver
+    username: paul
+    password: atreides      

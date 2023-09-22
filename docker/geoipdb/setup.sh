@@ -8,7 +8,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "geoip" <<-EOSQL
     CREATE SCHEMA IF NOT EXISTS geoip;
 
     create table if not exists geoip.countries (
-        code char(3) not null primary key,
+        code varchar(3) not null primary key,
         full_name varchar(100) not null
     );
 
@@ -21,8 +21,8 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "geoip" <<-EOSQL
 
     INSERT INTO geoip.countries (code, full_name)
     VALUES
-        ('US ', 'United States of America'),
-        ('NL ', 'Netherlands')
+        ('US', 'United States of America'),
+        ('NL', 'Netherlands')
 	ON CONFLICT (code) DO NOTHING;
 
     INSERT INTO geoip.geo_ip_ranges (id, beginip, endip, countrycode) 
