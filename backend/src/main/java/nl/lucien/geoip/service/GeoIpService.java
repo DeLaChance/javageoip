@@ -7,16 +7,16 @@ import inet.ipaddr.IPAddressString;
 import inet.ipaddr.ipv4.IPv4Address;
 import nl.lucien.geoip.adapter.GeoIpResponse;
 import nl.lucien.geoip.domain.Country;
-import nl.lucien.geoip.domain.GeoIpRangeRepository;
+import nl.lucien.geoip.domain.CountryRepository;
 import reactor.core.publisher.Mono;
 
 @Service
 public class GeoIpService {
     
-    private GeoIpRangeRepository repository;
+    private CountryRepository repository;
 
     @Autowired
-    public GeoIpService(GeoIpRangeRepository repository) {
+    public GeoIpService(CountryRepository repository) {
         this.repository = repository;
     }
 

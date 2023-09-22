@@ -1,5 +1,8 @@
 package nl.lucien.geoip.domain;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,6 +10,10 @@ import lombok.Data;
 @Builder
 public class Country {
 
-    private String code;    
+    @Id
+    @Column("code")
+    private String code; 
+    
+    @Column("full_name")
     private String name;
 }
