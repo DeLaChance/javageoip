@@ -1,28 +1,26 @@
 # Build stage
-FROM eclipse-temurin:20-jdk-alpine as build
+FROM maven:3.8.7-openjdk-18-slim as build
 
 WORKDIR /workspace/app
 
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
+WORKDIR /build
 
-# RUN ./mvnw dependency:go-offline
+COPY pom.xml ./
+RUN mvn dependency:go-offline
 
-COPY src src
-
-RUN ./mvnw install -DskipTests=true -Dskip.integration.tests=true
+COPY src/ /build/src/
 
 USER root
-RUN mvn package
+RUN mvn install -DskipTests=true -Dskip.integration.tests=true
 
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 
 # Application stage.
-FROM eclipse-temurin:20-jre-alpine AS javageoip
+FROM eclipse-temurin:18-jre-alpine AS javageoip
 VOLUME /tmp
-ARG DEPENDENCY=/workspace/app/target/dependency
+
+ARG DEPENDENCY=/build/target/dependency
 
 # Copy the maven artifacts from the build stage.
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
@@ -31,4 +29,4 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app/classes
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-cp","app:app/lib/*", "-Dspring.profiles.active=prd", "nl.lucien.Application" ]
+ENTRYPOINT ["java","-cp","/app/classes:/app/lib/*", "-Dspring.profiles.active=prd", "nl.lucien.Application" ]
