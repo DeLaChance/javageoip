@@ -51,3 +51,4 @@ To get access to DB:
 
 ## TODO:
 - Helm charts
+- Schemahero

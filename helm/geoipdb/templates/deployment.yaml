@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "javageoip.fullname" . }}
+  name: {{ include "geoipdb.fullname" . }}
   labels:
-    {{- include "javageoip.labels" . | nindent 4 }}
+    {{- include "geoipdb.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "javageoip.selectorLabels" . | nindent 6 }}
+      {{- include "geoipdb.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,13 +18,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "javageoip.selectorLabels" . | nindent 8 }}
+        {{- include "geoipdb.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "javageoip.serviceAccountName" . }}
+      serviceAccountName: {{ include "geoipdb.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -34,30 +34,17 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.port }}
-          env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prd
-            - name: POSTGRESQL_USER
-              value: {{ .Values.postgresql.auth.username }}
-            - name: POSTGRESQL_PASSWORD
-              value: {{ .Values.postgresql.auth.password }}
-            - name: POSTGRESQL_PORT
-              value: {{ first .Values.postgresql.service.ports | quote }}               
-            - name: POSTGRESQL_HOST
-              value: {{ first .Values.hostAliases | quote }} 
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
           livenessProbe:
             httpGet:
-              path: /actuator/health/liveness
-              port: {{ .Values.service.port }}
-            initialDelaySeconds: 30
-            periodSeconds: 10
+              path: /
+              port: http
           readinessProbe:
             httpGet:
-              path: /actuator/health/readiness
-              port: {{ .Values.service.port }}
-            initialDelaySeconds: 60
-            periodSeconds: 10
+              path: /
+              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
