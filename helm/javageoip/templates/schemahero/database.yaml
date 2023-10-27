@@ -1,0 +1,11 @@
+apiVersion: databases.schemahero.io/v1alpha4
+kind: Database
+metadata:
+  name: my-pg
+  namespace: schemahero-system
+spec:
+  connection:
+    postgres:
+      uri:
+        value: postgres://{{ .Values.postgresql.username }}:{{ .Values.postgresql.password }}@{{ .Values.postgresql.host }}:{{ .Values.postgresql.port }}/{{ .Values.postgresql.dbName }}
+        

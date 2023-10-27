@@ -1,0 +1,18 @@
+apiVersion: schemas.schemahero.io/v1alpha4
+kind: Table
+metadata:
+  name: geoip-countries
+  namespace: schemahero-system
+spec:
+  database: {{ .Values.postgresql.dbName }}
+  name: countries
+  schema:
+    postgres:
+      primaryKey: [code]
+      columns:
+        - name: code
+          type: varchar(3)
+        - name: name
+          type: varchar(100)
+          constraints:
+            notNull: true

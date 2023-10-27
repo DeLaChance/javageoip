@@ -2,5 +2,8 @@ dependencies:
 - name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 13.1.5
-digest: sha256:7af6658a5580613ab8d23239d872332e81feb8144933b6aa2dd5d38347aa41df
-generated: "2023-10-26T11:46:37.902235014+02:00"
+- name: schemahero
+  repository: oci://ghcr.io/schemahero/helm
+  version: 1.3.1
+digest: sha256:33b0d790aeefb568ed739824105867f7de7284fcd20f18abcfcd1a1b3c7bdf90
+generated: "2023-10-26T14:19:48.218578484+02:00"

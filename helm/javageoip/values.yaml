@@ -6,17 +6,13 @@ image:
   pullPolicy: Always
 
 postgresql:
-  auth:
-    username: "paul"
-    password: "atreides"  
-    database: "geoip"
-  service:
-    ports:
-      - "5432"
+  username: "paul"
+  password: "atreides"  
+  dbName: "geoip"
+  port: 5432
+  name: "geoip"
+  host: "geoip"
 
-hostAliases:
-  - "db"
-  
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -34,7 +30,7 @@ securityContext: {}
 
 service:
   name: javageoip
-  port: "8080"
+  port: 8080
 
 ingress:
   enabled: true

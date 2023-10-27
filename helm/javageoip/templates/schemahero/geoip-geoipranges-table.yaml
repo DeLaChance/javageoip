@@ -1,0 +1,33 @@
+apiVersion: schemas.schemahero.io/v1alpha4
+kind: Table
+metadata:
+  name: geoip-geoipranges
+  namespace: schemahero-system
+spec:
+  database: {{ .Values.postgresql.dbName }}
+  name: geo_ip_ranges
+  schema:
+    postgres:
+      primaryKey: [id]
+      foreignKeys: 
+        - columns:
+          - countryCode
+          references:
+            table: countries
+            columns:
+              - code
+      columns:
+        - name: id
+          type: int
+        - name: beginIp
+          type: int
+          constraints:
+            notNull: true
+        - name: endIp
+          type: int            
+          constraints:
+            notNull: true
+        - name: countryCode
+          type: varchar(3)
+          constraints:
+            notNull: true

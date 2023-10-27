@@ -39,13 +39,13 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prd
             - name: POSTGRESQL_USER
-              value: {{ .Values.postgresql.auth.username }}
+              value: {{ .Values.postgresql.username }}
             - name: POSTGRESQL_PASSWORD
-              value: {{ .Values.postgresql.auth.password }}
+              value: {{ .Values.postgresql.password }}
             - name: POSTGRESQL_PORT
-              value: {{ first .Values.postgresql.service.ports | quote }}               
+              value: {{ .Values.postgresql.port | quote }}               
             - name: POSTGRESQL_HOST
-              value: {{ first .Values.hostAliases | quote }} 
+              value: {{ .Values.postgresql.host }} 
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness

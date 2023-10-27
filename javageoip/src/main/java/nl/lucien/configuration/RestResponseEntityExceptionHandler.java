@@ -8,13 +8,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import lombok.extern.slf4j.Slf4j;
+
 @ControllerAdvice
+@Slf4j
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value 
       = { Exception.class })
     protected ResponseEntity<Object> handleConflict(
       RuntimeException ex, WebRequest request) {
+        log.error("Server error", ex);
+
         return handleExceptionInternal(ex, "Server error", 
           new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }

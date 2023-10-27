@@ -8,7 +8,7 @@ spring:
   datasource:
     database: geoip
     host: 172.17.33.48
-    port: 30007
+    port: 30001
     driver-class-name: org.postgresql.Driver
     username: paul
     password: atreides
