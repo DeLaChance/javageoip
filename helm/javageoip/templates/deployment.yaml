@@ -10,7 +10,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "javageoip.selectorLabels" . | nindent 6 }}
+      app: {{ .Chart.Name }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "javageoip.selectorLabels" . | nindent 8 }}
+        app: {{ .Chart.Name }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -43,7 +43,7 @@ spec:
             - name: POSTGRESQL_PASSWORD
               value: {{ .Values.postgresql.password }}
             - name: POSTGRESQL_PORT
-              value: {{ .Values.postgresql.nodePort | quote }}               
+              value: {{ .Values.postgresql.port | quote }}               
             - name: POSTGRESQL_HOST
               value: {{ .Values.postgresql.serviceName }} 
           livenessProbe:
@@ -51,13 +51,13 @@ spec:
               path: /actuator/health
               port: {{ .Values.service.port }}
             initialDelaySeconds: 30
-            periodSeconds: 10
+            periodSeconds: 60
           readinessProbe:
             httpGet:
-              path: /actuator/startup
+              path: /actuator/health
               port: {{ .Values.service.port }}
             initialDelaySeconds: 30
-            periodSeconds: 10
+            periodSeconds: 60
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

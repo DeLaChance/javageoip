@@ -17,7 +17,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(value 
       = { Exception.class })
     protected ResponseEntity<Object> handleConflict(
-      RuntimeException ex, WebRequest request) {
+      Exception ex, WebRequest request) {
         log.error("Server error", ex);
 
         return handleExceptionInternal(ex, "Server error", 

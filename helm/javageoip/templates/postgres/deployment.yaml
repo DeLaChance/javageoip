@@ -13,9 +13,10 @@ spec:
     spec:
       containers:
         - name: {{ .Values.postgresql.name }}
-          image: postgres:latest
+          image: {{ .Values.postgresql.repository }}:{{ .Values.postgresql.tag }}
           ports:
             - containerPort: 5432
+          command:  
           volumeMounts:
             - name: storage
               mountPath: /data/db

@@ -20,7 +20,7 @@ GET [http://localhost:8080/api/geoip/8.8.8.8/country](http://localhost:8080/api/
 ## Commands
 
 ## Build Docker 
-To build docker image for Java :
+To build docker image for Java + DB :
 ```
 VERSION="1.0.1";
 cd javageoip/
@@ -31,6 +31,17 @@ sudo docker build -t javageoip:${VERSION} .;
 
 docker login;
 docker push luciendelachance/javageoip:${VERSION};
+
+cd ../geoipdb;
+image=$(docker image ls | egrep '^geoipdb' | head -n 1 | awk '{ print $3 }');
+sudo docker build -t geoipdb:${VERSION} .;
+
+docker push luciendelachance/geoipdb:${VERSION};
+```
+
+## Build helm
+```
+ helm uninstall javageoip || helm upgrade --install javageoip helm/javageoip/
 ```
 
 ## Cluster
@@ -44,5 +55,4 @@ To get access to DB:
 
 
 ## TODO:
-- Helm charts
 - Schemahero

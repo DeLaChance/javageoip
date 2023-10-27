@@ -2,10 +2,12 @@ replicaCount: 1
 
 image:
   repository:  luciendelachance/javageoip
-  tag: 1.0.7
+  tag: 1.0.10
   pullPolicy: Always
 
 postgresql:
+  repository: luciendelachance/geoipdb
+  tag: 1.0.10
   username: "paul"
   password: "atreides"  
   dbName: "geoip"
@@ -31,7 +33,8 @@ podSecurityContext: {}
 securityContext: {}
 
 service:
-  name: javageoip
+  type: ClusterIP
+  name: javageoip-service
   port: 8080
 
 ingress:

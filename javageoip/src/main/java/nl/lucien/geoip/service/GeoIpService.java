@@ -15,7 +15,6 @@ import nl.lucien.geoip.domain.CountryRepository;
 import reactor.core.publisher.Mono;
 
 @Service
-@Slf4j
 public class GeoIpService {
     
     private CountryRepository repository;
@@ -23,12 +22,6 @@ public class GeoIpService {
     @Autowired
     public GeoIpService(CountryRepository repository) {
         this.repository = repository;
-    }
-
-    @PostConstruct
-    public void test() {
-        GeoIpResponse response = findCountryByIpAddress("8.8.8.8").block(Duration.ofSeconds(5));
-        log.info("Found response: {}", response);
     }
 
    public Mono<GeoIpResponse> findCountryByIpAddress(String ipAddress) {
