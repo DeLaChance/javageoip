@@ -7,5 +7,5 @@ spec:
   connection:
     postgres:
       uri:
-        value: postgres://{{ .Values.postgresql.username }}:{{ .Values.postgresql.password }}@{{ .Values.postgresql.host }}:{{ .Values.postgresql.port }}/{{ .Values.postgresql.dbName }}
+        value: postgres://{{ .Values.postgresql.username }}:{{ .Values.postgresql.password }}@{{ .Values.postgresql.serviceName }}:{{ .Values.postgresql.port }}/{{ .Values.postgresql.dbName }}
         

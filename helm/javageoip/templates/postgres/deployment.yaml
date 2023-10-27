@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgresdb
+  name: geoipdb
 spec:
   selector:
     matchLabels:
-      app: {{ .Values.postgresql.name }}
+      app.kubernetes.io/name: {{ .Values.postgresql.name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.postgresql.name }}
+        app.kubernetes.io/name: {{ .Values.postgresql.name }}
     spec:
       containers:
-        - name: postgresdb
+        - name: {{ .Values.postgresql.name }}
           image: postgres:latest
           ports:
             - containerPort: 5432

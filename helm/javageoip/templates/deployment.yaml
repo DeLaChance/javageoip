@@ -43,20 +43,20 @@ spec:
             - name: POSTGRESQL_PASSWORD
               value: {{ .Values.postgresql.password }}
             - name: POSTGRESQL_PORT
-              value: {{ .Values.postgresql.port | quote }}               
+              value: {{ .Values.postgresql.nodePort | quote }}               
             - name: POSTGRESQL_HOST
-              value: {{ .Values.postgresql.host }} 
+              value: {{ .Values.postgresql.serviceName }} 
           livenessProbe:
             httpGet:
-              path: /actuator/health/liveness
+              path: /actuator/health
               port: {{ .Values.service.port }}
             initialDelaySeconds: 30
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /actuator/health/readiness
+              path: /actuator/startup
               port: {{ .Values.service.port }}
-            initialDelaySeconds: 60
+            initialDelaySeconds: 30
             periodSeconds: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

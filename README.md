@@ -20,23 +20,17 @@ GET [http://localhost:8080/api/geoip/8.8.8.8/country](http://localhost:8080/api/
 ## Commands
 
 ## Build Docker 
-To build docker image for DB:
+To build docker image for Java :
 ```
-VERSION=`1.0.1`
+VERSION="1.0.1";
 cd javageoip/
 
-image=$(docker image ls | egrep '^javageoip' | head -n 1 | | awk '{ print $3 }')
-docker tag $image luciendelachance/javageoip:${VERSION}
-sudo docker build -t javageoip:${VERSION} .
+image=$(docker image ls | egrep '^javageoip' | head -n 1 | awk '{ print $3 }');
+docker tag $image luciendelachance/javageoip:${VERSION};
+sudo docker build -t javageoip:${VERSION} .;
 
-cd ../
-
-cd docker/geoipdb/
-sudo docker build -t geoipdb:${VERSION} .
-
-image=$(docker image ls | egrep '^geoipdb' | head -n 1 | | awk '{ print $3 }')
-docker tag $image luciendelachance/geoipdb:${VERSION}
-docker push luciendelachance/geoipdb:${VERSION}
+docker login;
+docker push luciendelachance/javageoip:${VERSION};
 ```
 
 ## Cluster

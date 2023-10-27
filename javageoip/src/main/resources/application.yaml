@@ -12,3 +12,13 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: paul
     password: atreides
+  main:
+    allow-bean-definition-overriding: true
+
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      base-path: /actuator
+      exposure:
+        include: health, startup, beans, info, metrics

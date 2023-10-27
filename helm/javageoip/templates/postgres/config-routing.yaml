@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-services
+  namespace: ingress-nginx
+data:
+  {{ .Values.postgresql.nodePort }}: "default/geoipdb-service:5432"

@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.ToString;
 import nl.lucien.geoip.domain.Country;
 
 @Data
 @Builder
+@ToString
 public class GeoIpResponse {
 
     private CountryDto country;
@@ -23,6 +25,7 @@ public class GeoIpResponse {
  
     @Getter
     @AllArgsConstructor
+    @ToString
     public static class CountryDto {        
 
         private String code;
@@ -35,6 +38,7 @@ public class GeoIpResponse {
     
     @Getter
     @AllArgsConstructor
+    @ToString
     public static class QueryDto {        
         private String ipAddress;
         private Long ipAddressNumeric;

@@ -13,5 +13,12 @@ spring:
     username: ${POSTGRESQL_USER}
     password: ${POSTGRESQL_PASSWORD}
 
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      base-path: /actuator
+      exposure:
+        include: health, startup, beans, info, metrics
 
     
